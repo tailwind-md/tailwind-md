@@ -1,10 +1,11 @@
 import { defineConfig, PluginOption } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import viteTSConfigPaths from "vite-tsconfig-paths";
+import vitePluginDTS from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
-  const plugins: PluginOption[] = [viteTSConfigPaths()];
+  const plugins: PluginOption[] = [viteTSConfigPaths(), vitePluginDTS()];
 
   if (mode === "development") {
     plugins.push(svelte());
@@ -13,7 +14,7 @@ export default defineConfig(async ({ mode }) => {
   return {
     build: {
       lib: {
-        entry: "./src/plugin/index.ts",
+        entry: "./src/index.ts",
         formats: ["es", "cjs"],
         name: "TailwindMaterial3",
         fileName: "index",
