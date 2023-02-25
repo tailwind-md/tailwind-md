@@ -12,7 +12,7 @@
     >Secondary</div
   >
   <div
-    class="col-span-1 flex flex-row items-center bg-tertiary text-on-tertiary h-32 rounded-small justify-center opacity-hover-content"
+    class="col-span-1 flex flex-row items-center bg-tertiary text-body-large text-on-tertiary h-32 rounded-large justify-center"
     >Tertiary</div
   >
 </div>

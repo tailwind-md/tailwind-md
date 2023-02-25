@@ -11,16 +11,26 @@ import type {
   TonalPalette,
   Tones,
   BaseColor,
+  FontStyle,
 } from "$plugin/types";
 
 type TransormerOptions = {
   prefix?: string;
-  transformKey?: (k: string) => string;
+  createKey?: (k: string, v: unknown) => string;
+};
+
+type ThemeTransformerOptions = TransormerOptions & {
+  createValue?: (k: string, v: unknown) => string;
 };
 
 const defaultTransformerOptions: Required<TransormerOptions> = {
   prefix: "",
-  transformKey: (k) => k,
+  createKey: (k) => k,
+};
+
+const defaultThemeTransformerOptions: Required<ThemeTransformerOptions> = {
+  ...defaultTransformerOptions,
+  createValue: (k) => k,
 };
 
 export function camelToKebabCase(snake: string): string {
@@ -41,7 +51,7 @@ export function toCSSVariables(
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
     vars[
-      `--${pref(opts.prefix)}${camelToKebabCase(opts.transformKey(key))}`
+      `--${pref(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`
     ] = `${value}`;
   }
   return vars;
@@ -55,7 +65,7 @@ export function toClassNames<K extends unknown>(
   const c: Record<string, K> = {};
 
   for (const [key, value] of Object.entries(o)) {
-    c[`${pref(opts.prefix)}${camelToKebabCase(opts.transformKey(key))}`] =
+    c[`${pref(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`] =
       value;
   }
 
@@ -140,31 +150,76 @@ function createSystemKeyColors<C extends string>(
   } as unknown as SystemKeyColor<C>;
 }
 
-export function toTailwindColorsWithAlpha(
+export function toTailwindColorTheme(
   o: Record<string, string | TonalPalette>,
-  opts?: TransormerOptions,
+  opts?: ThemeTransformerOptions,
 ): Record<string, string | TonalPalette> {
-  opts = { ...defaultTransformerOptions, ...opts };
+  opts = { ...defaultThemeTransformerOptions, ...opts };
   const x: Record<string, string | TonalPalette> = {};
 
   for (let [k, v] of Object.entries(o)) {
-    k = opts.transformKey(k);
+    const newKey = camelToKebabCase(opts.createKey(k, v));
+    const cssVar = camelToKebabCase(opts.createValue(k, v));
 
     if (typeof v === "string") {
-      x[k] = `rgb(var(--${pref(opts.prefix)}${camelToKebabCase(
-        k,
-      )}) / <alpha-value>)`;
+      x[newKey] = `rgb(var(--${pref(opts.prefix)}${cssVar}) / <alpha-value>)`;
     } else {
-      x[k] = createBlankTonalPalette();
+      x[newKey] = createBlankTonalPalette();
       for (const [k2] of Object.entries(v)) {
-        x[k][k2] = `rgb(var(--${pref(opts.prefix)}${camelToKebabCase(
-          k,
-        )}${k2}) / <alpha-value>)`;
+        x[newKey][k2] = `rgb(var(--${pref(
+          opts.prefix,
+        )}${cssVar}${k2}) / <alpha-value>)`;
       }
     }
   }
 
   return x;
+}
+
+// type RecursiveRecord<K extends string | number | symbol, V> = {
+//   [Key in K]: V | RecursiveRecord<K, V>;
+// };
+
+export function toTailwindTheme<V>(
+  o: Record<string, V>,
+  opts?: ThemeTransformerOptions,
+): Record<string, string> {
+  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const x: Record<string, string> = {};
+
+  for (let [k, v] of Object.entries(o)) {
+    x[camelToKebabCase(opts.createKey(k, v))] = `var(--${pref(
+      opts.prefix,
+    )}${camelToKebabCase(opts.createValue(k, v))})`;
+  }
+
+  return x;
+}
+type FontSizeTheme = Record<
+  string,
+  [string, { lineHeight: string; letterSpacing: string; fontWeight: string }]
+>;
+export function toTailwindFontSizeTheme(
+  x: Record<string, FontStyle>,
+  opts?: ThemeTransformerOptions,
+): FontSizeTheme {
+  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const t: FontSizeTheme = {};
+
+  for (const [k, v] of Object.entries(x)) {
+    const p = pref(opts.prefix);
+    const cssVar = camelToKebabCase(opts.createValue(k, v));
+    t[camelToKebabCase(opts.createKey(k, v))] = [
+      `var(--${p}${cssVar}-size)`,
+      {
+        fontWeight: `var(--${p}${cssVar}-weight)`,
+        lineHeight: `var(--${p}${cssVar}-line-height)`,
+        letterSpacing: `var(--${p}${cssVar}-tracking)`,
+      },
+    ];
+  }
+
+  return t;
 }
 
 export function createColorScheme(

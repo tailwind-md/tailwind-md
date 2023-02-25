@@ -1,19 +1,15 @@
 import plugin from "tailwindcss/plugin";
-import type {
-  KeyValuePair,
-  RecursiveKeyValuePair,
-  ResolvableTo,
-} from "tailwindcss/types/config";
+import type { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
 import { materialDesignTheme, type MaterialDesignOptions } from "./theme";
 import {
   flattenProperties,
-  toClassNames,
   toCSSVariables,
-  toTailwindColorsWithAlpha,
+  toTailwindColorTheme,
+  toTailwindFontSizeTheme,
+  toTailwindTheme,
 } from "./utils";
 
-type TWThemeValue = ResolvableTo<RecursiveKeyValuePair<string, string>>;
-type TWThemeValue2 = ResolvableTo<KeyValuePair<string, string>>;
+type RTKVP = ResolvableTo<KeyValuePair<string, string>>;
 
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignOptions>>(
   (opts) => {
@@ -33,28 +29,30 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignOptions>>(
   (opts) => {
     const mt = materialDesignTheme(opts);
 
-    let colors: TWThemeValue = {
-      ...toClassNames(
-        toTailwindColorsWithAlpha(mt.sys.color, { prefix: "md-sys-color" }),
-        {},
-      ),
-    };
+    let colors = toTailwindColorTheme(mt.sys.color, {
+      prefix: "md-sys-color",
+    });
 
-    let opacity: TWThemeValue2 = toClassNames(flattenProperties(mt.sys.state), {
-      transformKey: (k) => k.replace("Opacity", ""),
-    }) as unknown as TWThemeValue2;
+    const opacity = toTailwindTheme(flattenProperties(mt.sys.state), {
+      prefix: "md-sys-state",
+      createKey: (k) => k.replace("Opacity", ""),
+    }) as unknown as RTKVP;
 
-    let borderRadius: TWThemeValue2 = toClassNames(mt.sys.shape.corner);
+    const borderRadius = toTailwindTheme(mt.sys.shape.corner, {
+      prefix: "md-sys-shape-corner",
+    });
+
+    const fontSize = toTailwindFontSizeTheme(mt.sys.typescale, {
+      prefix: "md-sys-typescale",
+    });
 
     if (opts?.emitReferenceClasses) {
       colors = {
         ...colors,
 
-        ...toClassNames(
-          toTailwindColorsWithAlpha(mt.ref.palette, {
-            prefix: "md-ref-palette",
-          }),
-        ),
+        ...toTailwindColorTheme(mt.ref.palette, {
+          prefix: "md-ref-palette",
+        }),
       };
     }
 
@@ -63,6 +61,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignOptions>>(
         colors,
         borderRadius,
         opacity,
+        fontSize,
       },
     };
   },
