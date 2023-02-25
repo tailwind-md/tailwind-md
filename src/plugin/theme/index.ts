@@ -14,6 +14,7 @@ import {
   objectHexToRGBSpaceSeparated,
   createCustomReferencePalatte,
   createCustomColors,
+  type DeepRequired,
 } from "$plugin/utils";
 
 export type MaterialDesignOptions = {
@@ -38,7 +39,8 @@ export const materialDefaultOptions = {
     seed: "#6750a4",
     scheme: {},
     seedReferencePalette: {},
-  },
+    custom: {},
+  } satisfies Required<MaterialDesignOptions["color"]>,
   state: {
     hover: {
       contentOpacity: "100%",

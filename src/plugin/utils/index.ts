@@ -14,6 +14,8 @@ import type {
   FontStyle,
 } from "$plugin/types";
 
+export type * from "./types";
+
 type TransormerOptions = {
   prefix?: string;
   createKey?: (k: string, v: unknown) => string;
