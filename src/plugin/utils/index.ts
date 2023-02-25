@@ -5,13 +5,23 @@ import {
   argbFromHex,
 } from "$plugin/material-color";
 import type {
-  BaseReferencePalette,
-  BaseColorScheme,
+  ReferencePalette,
+  SystemColorScheme,
   SystemKeyColor,
   TonalPalette,
   Tones,
-  BaseColors,
+  BaseColor,
 } from "$plugin/types";
+
+type TransormerOptions = {
+  prefix?: string;
+  transformKey?: (k: string) => string;
+};
+
+const defaultTransformerOptions: Required<TransormerOptions> = {
+  prefix: "",
+  transformKey: (k) => k,
+};
 
 export function camelToKebabCase(snake: string): string {
   return /^([A-Z])/.test(snake)
@@ -25,40 +35,46 @@ function pref(p: string) {
 
 export function toCSSVariables(
   o: Record<string, unknown>,
-  prefix = "",
+  opts?: TransormerOptions,
 ): Record<string, string> {
+  opts = { ...defaultTransformerOptions, ...opts };
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    vars[`--${pref(prefix)}${camelToKebabCase(key)}`] = `${value}`;
+    vars[
+      `--${pref(opts.prefix)}${camelToKebabCase(opts.transformKey(key))}`
+    ] = `${value}`;
   }
   return vars;
 }
 
 export function toClassNames<K extends unknown>(
   o: Record<string, K>,
-  prefix = "",
+  opts?: TransormerOptions,
 ): Record<string, K> {
+  opts = { ...defaultTransformerOptions, ...opts };
   const c: Record<string, K> = {};
 
   for (const [key, value] of Object.entries(o)) {
-    c[`${pref(prefix)}${camelToKebabCase(key)}`] = value;
+    c[`${pref(opts.prefix)}${camelToKebabCase(opts.transformKey(key))}`] =
+      value;
   }
 
   return c;
 }
 
 function flattenObject(
-  pre: string,
   o: Record<string, unknown>,
+  opts?: TransormerOptions,
 ): Record<string, unknown> {
+  opts = { ...defaultTransformerOptions, ...opts };
   const flattened: Record<string, unknown> = {};
 
   for (const [k, v] of Object.entries(o)) {
-    const key = `${pre}${pre === "" ? k : capitalize(k)}`;
+    const key = `${opts.prefix}${opts.prefix === "" ? k : capitalize(k)}`;
 
     if (typeof v === "object") {
       for (const [k2, v2] of Object.entries(
-        flattenObject(key, v as Record<string, unknown>),
+        flattenObject(v as Record<string, unknown>, { prefix: key }),
       )) {
         flattened[k2] = v2;
       }
@@ -73,7 +89,7 @@ function flattenObject(
 export function flattenProperties(
   o: Record<string, unknown>,
 ): Record<string, unknown> {
-  return flattenObject("", o);
+  return flattenObject(o, { prefix: "" });
 }
 
 export function capitalize<S extends string>(s: S): Capitalize<S> {
@@ -126,19 +142,22 @@ function createSystemKeyColors<C extends string>(
 
 export function toTailwindColorsWithAlpha(
   o: Record<string, string | TonalPalette>,
-  prefix = "",
+  opts?: TransormerOptions,
 ): Record<string, string | TonalPalette> {
+  opts = { ...defaultTransformerOptions, ...opts };
   const x: Record<string, string | TonalPalette> = {};
 
-  for (const [k, v] of Object.entries(o)) {
+  for (let [k, v] of Object.entries(o)) {
+    k = opts.transformKey(k);
+
     if (typeof v === "string") {
-      x[k] = `rgb(var(--${pref(prefix)}${camelToKebabCase(
+      x[k] = `rgb(var(--${pref(opts.prefix)}${camelToKebabCase(
         k,
       )}) / <alpha-value>)`;
     } else {
       x[k] = createBlankTonalPalette();
       for (const [k2] of Object.entries(v)) {
-        x[k][k2] = `rgb(var(--${pref(prefix)}${camelToKebabCase(
+        x[k][k2] = `rgb(var(--${pref(opts.prefix)}${camelToKebabCase(
           k,
         )}${k2}) / <alpha-value>)`;
       }
@@ -150,7 +169,7 @@ export function toTailwindColorsWithAlpha(
 
 export function createColorScheme(
   mode: "light" | "dark" = "light",
-): BaseColorScheme {
+): SystemColorScheme {
   return {
     // Neutrals
     outline: `var(--md-ref-palette-neutral-variant${switchMode(mode, 50, 60)})`,
@@ -198,7 +217,7 @@ export function createColorScheme(
   };
 }
 
-export function createReferencePalette(hex: string): BaseReferencePalette {
+export function createReferencePalette(hex: string): ReferencePalette {
   const cp = CorePalette.of(argbFromHex(hex));
   const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 
@@ -356,9 +375,9 @@ export function createTonalPalette(hex: string): TonalPalette {
 }
 
 export function createCustomReferencePalatte(
-  o: Partial<Record<BaseColors, string>>,
-): Partial<Record<BaseColors, TonalPalette>> {
-  const x: Partial<Record<BaseColors, TonalPalette>> = {};
+  o: Partial<Record<BaseColor, string>>,
+): Partial<Record<BaseColor, TonalPalette>> {
+  const x: Partial<Record<BaseColor, TonalPalette>> = {};
 
   for (const [k, v] of Object.entries(o)) {
     x[k] = createTonalPalette(v);

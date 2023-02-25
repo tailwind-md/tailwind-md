@@ -15,16 +15,13 @@ export type Tones =
 
 export type TonalPalette = Record<Tones, string>;
 
-export type BaseAccentColors = "primary" | "secondary" | "tertiary";
+export type AccentColor = "primary" | "secondary" | "tertiary";
 
-export type BaseSemanticColors = "success" | "warning" | "error";
+export type SemanticColor = "success" | "warning" | "error";
 
-export type BaseNeutralColors = "neutral" | "neutralVariant";
+export type NeutralColor = "neutral" | "neutralVariant";
 
-export type BaseColors =
-  | BaseAccentColors
-  | BaseSemanticColors
-  | BaseNeutralColors;
+export type BaseColor = AccentColor | SemanticColor | NeutralColor;
 
 export type SystemKeyColor<AccentColor extends string> = Record<
   | `${AccentColor}`
@@ -34,7 +31,7 @@ export type SystemKeyColor<AccentColor extends string> = Record<
   string
 >;
 
-export type BaseSystemNeutralColors = {
+export type SystemNeutralColors = {
   surface: string;
   onSurface: string;
   surfaceVariant: string;
@@ -45,7 +42,7 @@ export type BaseSystemNeutralColors = {
   outlineVariant: string;
 };
 
-export type BaseSystemKeyColors =
+export type SystemKeyColors =
   | SystemKeyColor<"primary">
   | SystemKeyColor<"secondary">
   | SystemKeyColor<"tertiary">
@@ -53,7 +50,7 @@ export type BaseSystemKeyColors =
   | SystemKeyColor<"warning">
   | SystemKeyColor<"error">;
 
-export type BaseSystemExtraColors = {
+export type SystemExtraColors = {
   scrim: string;
   shadow: string;
   surfaceTint: string;
@@ -64,8 +61,8 @@ export type BaseSystemExtraColors = {
   white: string;
 };
 
-export type BaseReferencePalette = Record<BaseColors, TonalPalette>;
+export type ReferencePalette = Record<BaseColor, TonalPalette>;
 
-export type BaseColorScheme = BaseSystemKeyColors &
-  BaseSystemNeutralColors &
-  BaseSystemExtraColors;
+export type SystemColorScheme = SystemKeyColors &
+  SystemNeutralColors &
+  SystemExtraColors;

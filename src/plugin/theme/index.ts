@@ -1,8 +1,10 @@
 import type {
-  BaseColors,
-  BaseReferencePalette,
-  BaseColorScheme,
+  BaseColor,
+  ReferencePalette as ReferencePalette,
+  SystemColorScheme as SystemColorScheme,
+  SystemStates,
 } from "$plugin/types";
+import type { Shape } from "$plugin/types/shape";
 import {
   createReferencePalette,
   createColorScheme,
@@ -16,26 +18,68 @@ import {
 export type MaterialDesignOptions = {
   color?: {
     seed?: string;
-    seedReferencePalette?: Partial<Record<BaseColors, string>>;
+    seedReferencePalette?: Partial<Record<BaseColor, string>>;
     custom?: Record<string, string>;
-    scheme?: Partial<BaseColorScheme>;
+    scheme?: Partial<SystemColorScheme>;
   };
+
+  state?: Partial<SystemStates>;
+
+  shape?: Partial<Shape>;
 
   emitReferenceClasses?: boolean;
 };
 
-const defaultOptions = {
+export const materialDefaultOptions = {
   color: {
     seed: "#6750a4",
     scheme: {},
     seedReferencePalette: {},
   },
+  state: {
+    hover: {
+      contentOpacity: "100%",
+      stateLayerOpacity: "8%",
+      containerOpacity: "100%",
+    },
+    focus: {
+      contentOpacity: "100%",
+      stateLayerOpacity: "12%",
+      containerOpacity: "100%",
+    },
+    pressed: {
+      contentOpacity: "100%",
+      stateLayerOpacity: "12%",
+      containerOpacity: "100%",
+    },
+    dragged: {
+      contentOpacity: "100%",
+      stateLayerOpacity: "16%",
+      containerOpacity: "100%",
+    },
+    disabled: {
+      contentOpacity: "38%",
+      stateLayerOpacity: "100%",
+      containerOpacity: "12%",
+    },
+  },
+  shape: {
+    corner: {
+      none: "0px",
+      extraSmall: "4px",
+      small: "8px",
+      medium: "12px",
+      large: "16px",
+      extraLarge: "28px",
+      full: "9999px",
+    },
+  },
   emitReferenceClasses: false,
 } satisfies Required<MaterialDesignOptions>;
 
 type MaterialDesignTheme = {
-  ref: { palette: BaseReferencePalette };
-  sys: { color: BaseColorScheme };
+  ref: { palette: ReferencePalette };
+  sys: { color: SystemColorScheme; state: SystemStates; shape: Shape };
 };
 
 let _mdt: MaterialDesignTheme | undefined;
@@ -51,7 +95,7 @@ export function materialDesignTheme(
   _lastOpts = opts;
 
   opts = deepMerge(
-    defaultOptions as Required<MaterialDesignOptions>,
+    materialDefaultOptions as Required<MaterialDesignOptions>,
     opts ?? {},
   );
 
@@ -62,6 +106,8 @@ export function materialDesignTheme(
       },
       sys: {
         color: createColorScheme(),
+        state: opts.state,
+        shape: opts.shape,
       },
     },
     {
