@@ -10,6 +10,7 @@ import {
   deepEqual,
   deepMerge,
   flattenProperties,
+  objectHexToRGBSpaceSeparated,
   toClassNames,
   toCSSVariables,
   toTailwindColorsWithAlpha,
@@ -23,7 +24,7 @@ import type {
 export type Material3Options = {
   systemColors?: Partial<BaseSystemColors>;
 
-  seedReferenceKeyColors?: { extended?: Record<string, string> } & Partial<
+  seedReferencePalette?: { extended?: Record<string, string> } & Partial<
     Record<BaseColors, string>
   >;
 
@@ -34,7 +35,7 @@ export type Material3Options = {
 const defaultOptions: Required<Material3Options> = {
   seedKeyColor: "#6750a4",
   systemColors: {},
-  seedReferenceKeyColors: {},
+  seedReferencePalette: {},
   emitReferenceClasses: false,
 };
 
@@ -65,7 +66,7 @@ function m3Theme(opts: Material3Options): Material3Theme {
         color: createSystemColors(),
       },
     },
-    { sys: { color: opts.systemColors } },
+    { sys: { color: objectHexToRGBSpaceSeparated(opts.systemColors) } },
   ) as unknown as Material3Theme;
 
   return _m3t;

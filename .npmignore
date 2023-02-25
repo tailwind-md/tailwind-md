@@ -1,0 +1,10 @@
+/src
+/svelte.config.js
+/postcss.config.cjs
+/tsconfig.json
+/tsconfig.node.json
+/vite.config.ts
+/.prettierrc.cjs
+/.eslintrc.cjs
+/index.html
+/.gitignore

@@ -2,6 +2,7 @@ import {
   hexFromArgb,
   type CorePalette,
   TonalPalette as OldTonalPalette,
+  argbFromHex,
 } from "$plugin/material-color";
 import type {
   BaseReferencePalette,
@@ -253,6 +254,18 @@ export function corePaletteToReferencePalette(
   };
 }
 
+export function objectHexToRGBSpaceSeparated(
+  o: Record<string, string>,
+): Record<string, string> {
+  const x: Record<string, string> = {};
+
+  for (const [k, v] of Object.entries(o)) {
+    x[k] = hexToRGBSpaceSeparated(v);
+  }
+
+  return x;
+}
+
 function deepMergeImpl<T extends object>(o1: T, o2: T): T {
   const merged: T = { ...o1 };
   for (const [key, value] of Object.entries(o2)) {
@@ -320,4 +333,24 @@ export function deepEqual<T1 extends object, T2 extends object>(
   }
 
   return true;
+}
+
+export function createTonalPalette(hex: string): TonalPalette {
+  const tp = OldTonalPalette.fromInt(argbFromHex(hex));
+
+  return {
+    0: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(0))),
+    10: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(10))),
+    20: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(20))),
+    30: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(30))),
+    40: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(40))),
+    50: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(50))),
+    60: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(60))),
+    70: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(70))),
+    80: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(80))),
+    90: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(90))),
+    95: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(95))),
+    99: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(99))),
+    100: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(100))),
+  };
 }

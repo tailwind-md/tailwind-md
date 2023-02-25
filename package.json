@@ -1,5 +1,5 @@
 {
-  "name": "tailwind-m3",
+  "name": "@rencedm112/tailwind-m3",
   "private": false,
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
@@ -13,7 +13,7 @@
   "files": [
     "./dist"
   ],
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
