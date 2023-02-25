@@ -34,4 +34,8 @@ export type AccentColor<AccentColor extends string> = Record<
   string
 >;
 
-export type ReferenceColorPalatte = Record<BaseColors, TonalPalette>;
+export type BaseReferenceColorPalatte = Record<BaseColors, TonalPalette>;
+
+export type BaseSystemColorPalatte = AccentColor<
+  "primary" | "secondary" | "tertiary" | "success" | "warning" | "error"
+>;

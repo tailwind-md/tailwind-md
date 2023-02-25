@@ -1,7 +1,7 @@
 const material3 = require("./dist/index.cjs");
 
 module.exports = {
-  content: [],
+  content: ["./src/**/*.svelte"],
   theme: {
     extend: {},
   },

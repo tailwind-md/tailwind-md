@@ -1,32 +1,56 @@
 import { hexFromArgb, type CorePalette } from "$plugin/material-color";
-import type { ReferenceColorPalatte, TonalPalette, Tones } from "$plugin/types";
+import type {
+  BaseReferenceColorPalatte,
+  TonalPalette,
+  Tones,
+} from "$plugin/types";
 
-export function camelToSnake(snake: string): string {
-  return snake;
+export function camelToSnakeCase(snake: string): string {
+  return /^([A-Z])/.test(snake)
+    ? snake
+    : snake.replace(/([a-z])([A-Z]|[0-9])/g, "$1_$2").toLowerCase();
+}
+
+export function camelToKebabCase(snake: string): string {
+  return /^([A-Z])/.test(snake)
+    ? snake
+    : snake.replace(/([a-z])([A-Z]|[0-9])/g, "$1-$2").toLowerCase();
 }
 
 export function toCSSVariables(
-  o: Record<string, unknown>
+  o: Record<string, unknown>,
 ): Record<string, string> {
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    vars[`--${camelToSnake(key)}`] = `${value}`;
+    vars[`--${camelToKebabCase(key)}`] = `${value}`;
   }
   return vars;
 }
 
-function flattenObject(o: Record<string, unknown>): Record<string, unknown> {
-  // Convert a tree of properties into a single object
+function flattenObject(
+  pre: string,
+  o: Record<string, unknown>,
+): Record<string, unknown> {
+  const flattened: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(o)) {
+    if (typeof v === "object") {
+      for (const [k2, v2] of Object.entries(
+        flattenObject(k, v as Record<string, unknown>),
+      )) {
+        flattened[k2] = v2;
+      }
+    } else {
+      flattened[`${pre}${pre === "" ? k : capitalize(k)}`] = v;
+    }
   }
 
-  return {};
+  return flattened;
 }
 
 export function flattenProperties(
-  o: Record<string, unknown>
+  o: Record<string, unknown>,
 ): Record<string, unknown> {
-  return flattenObject(o);
+  return flattenObject("", o);
 }
 
 export function capitalize(s: string): string {
@@ -98,9 +122,9 @@ function createBlankTonalPalette(): TonalPalette {
   };
 }
 
-export function corePaletteToReferenceCorePalette(
-  cp: CorePalette
-): ReferenceColorPalatte {
+export function corePaletteToReferencePalette(
+  cp: CorePalette,
+): BaseReferenceColorPalatte {
   const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 
   const primary = createBlankTonalPalette();
@@ -153,4 +177,21 @@ export function corePaletteToReferenceCorePalette(
     neutral,
     neutralVariant,
   };
+}
+
+export function deepMerge<T extends object>(o1: T, o2: T): T {
+  const merged: T = { ...o1 };
+  for (const [key, value] of Object.entries(o2)) {
+    if (typeof value === "object") {
+      if (typeof merged[key] === "object") {
+        merged[key] = deepMerge(o1[key] as T, value as T);
+      } else {
+        merged[key] = value;
+      }
+    } else {
+      merged[key] = value;
+    }
+  }
+
+  return merged;
 }

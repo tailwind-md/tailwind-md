@@ -1,14 +1,12 @@
 import plugin from "tailwindcss/plugin";
-import type { BaseColors, TonalPalette, AccentColor } from "./types";
+import type { BaseColors, AccentColor } from "./types";
 import {
-  corePaletteToReferenceCorePalette,
+  corePaletteToReferencePalette,
+  deepMerge,
   flattenProperties,
   toCSSVariables,
 } from "./utils";
-import { Hct, argbFromHex, CorePalette } from "./material-color";
-
-
-
+import { argbFromHex, CorePalette } from "./material-color";
 
 export type Material3Options = {
   systemColors?: Record<string, string> &
@@ -25,23 +23,33 @@ export type Material3Options = {
   seedKeyColor?: string;
 };
 
-const defaultOptions: Material3Options = {};
+const defaultOptions: Required<Material3Options> = {
+  seedKeyColor: "#6750a4",
+  systemColors: {},
+  seedReferenceKeyColors: {},
+};
 
 const tailwindPlugin = plugin.withOptions<Material3Options>(
   (opts) => {
+    opts = deepMerge(defaultOptions, opts ?? {});
+
     return ({ addBase }) => {
-      const corePalette = CorePalette.of(
-        argbFromHex(opts?.seedKeyColor ?? "#6750a4"),
-      );
+      const corePalette = CorePalette.of(argbFromHex(opts.seedKeyColor));
 
-      const refCorePalette = corePaletteToReferenceCorePalette(corePalette);
+      const colorRefPalette = corePaletteToReferencePalette(corePalette);
 
-      for (const tonalPalette of Object.values(corePalette)) {
-        addBase({ "*": toCSSVariables(flattenProperties(tonalPalette)) });
-      }
+      // add base CSS variables
+      addBase({
+        "*": toCSSVariables(
+          flattenProperties({
+            m3: { ref: { color: colorRefPalette }, sys: {} },
+          }),
+        ),
+      });
     };
   },
   (opts) => {
+    opts = deepMerge(defaultOptions, opts ?? {});
     return {};
   },
 );
