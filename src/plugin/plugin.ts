@@ -1,6 +1,7 @@
 import plugin from "tailwindcss/plugin";
 import type { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
 import { materialDesignTheme, type MaterialDesignOptions } from "./theme";
+export type * from "./theme";
 import {
   flattenProperties,
   toCSSVariables,
