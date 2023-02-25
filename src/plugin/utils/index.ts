@@ -5,26 +5,64 @@ export function camelToSnake(snake: string): string {
   return snake;
 }
 
-export function toCSSVariables(o: Record<string, string>) {
+export function toCSSVariables(
+  o: Record<string, unknown>
+): Record<string, string> {
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    vars[`--${camelToSnake(key)}`] = value;
+    vars[`--${camelToSnake(key)}`] = `${value}`;
   }
   return vars;
 }
 
-export function createSystemAccentColorClasses(accentColors: string[]) {
+function flattenObject(o: Record<string, unknown>): Record<string, unknown> {
+  // Convert a tree of properties into a single object
+  for (const [k, v] of Object.entries(o)) {
+  }
+
+  return {};
+}
+
+export function flattenProperties(
+  o: Record<string, unknown>
+): Record<string, unknown> {
+  return flattenObject(o);
+}
+
+export function capitalize(s: string): string {
+  return s[0].toUpperCase() + s.slice(1);
+}
+
+export function createAccentColorClasses(accentColors: string[]) {
   const colors: Record<string, Record<string, string> & { DEFAULT: string }> =
     {};
   for (const accentColor of accentColors) {
-    colors[`sys-${accentColor}`] = { DEFAULT: `var(--sys-${accentColor})` };
-    colors[`sys-on-${accentColor}`] = {
+    colors[`${accentColor}`] = { DEFAULT: `var(--sys-${accentColor})` };
+    colors[`on-${accentColor}`] = {
       DEFAULT: `var(--sys-on-${accentColor})`,
     };
-    colors[`sys-${accentColor}-container`] = {
+    colors[`${accentColor}-container`] = {
       DEFAULT: `var(--sys-${accentColor}-container)`,
     };
-    colors[`sys-on-${accentColor}-container`] = {
+    colors[`on-${accentColor}-container`] = {
+      DEFAULT: `var(--sys-on-${accentColor}-container)`,
+    };
+  }
+  return colors;
+}
+
+export function createSemanticColorClasses(accentColors: string[]) {
+  const colors: Record<string, Record<string, string> & { DEFAULT: string }> =
+    {};
+  for (const accentColor of accentColors) {
+    colors[`${accentColor}`] = { DEFAULT: `var(--sys-${accentColor})` };
+    colors[`on-${accentColor}`] = {
+      DEFAULT: `var(--sys-on-${accentColor})`,
+    };
+    colors[`${accentColor}-container`] = {
+      DEFAULT: `var(--sys-${accentColor}-container)`,
+    };
+    colors[`on-${accentColor}-container`] = {
       DEFAULT: `var(--sys-on-${accentColor}-container)`,
     };
   }
@@ -33,12 +71,12 @@ export function createSystemAccentColorClasses(accentColors: string[]) {
 
 export function createSystemNeutralColorClasses() {
   return {
-    "sys-background": { DEFAULT: "var(--sys-background)" },
-    "sys-on-background": { DEFAULT: "var(--sys-on-background)" },
-    "sys-on-surface": { DEFAULT: "var(--sys-surface)" },
-    "sys-on-surface-variant": { DEFAULT: "var(--sys-on-surface)" },
-    "sys-outline": { DEFAULT: "var(--sys-outline)" },
-    "sys-outline-variant": { DEFAULT: "var(--sys-outline-variant)" },
+    background: { DEFAULT: "var(--sys-background)" },
+    "on-background": { DEFAULT: "var(--sys-on-background)" },
+    "on-surface": { DEFAULT: "var(--sys-surface)" },
+    "on-surface-variant": { DEFAULT: "var(--sys-on-surface)" },
+    outline: { DEFAULT: "var(--sys-outline)" },
+    "outline-variant": { DEFAULT: "var(--sys-outline-variant)" },
   };
 }
 
@@ -61,7 +99,7 @@ function createBlankTonalPalette(): TonalPalette {
 }
 
 export function corePaletteToReferenceCorePalette(
-  cp: CorePalette,
+  cp: CorePalette
 ): ReferenceColorPalatte {
   const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 
@@ -81,21 +119,28 @@ export function corePaletteToReferenceCorePalette(
   }
 
   const success = createBlankTonalPalette();
+  for (const tone of tones) {
+    success[tone] = hexFromArgb(cp.success.tone(tone));
+  }
+
   const warning = createBlankTonalPalette();
+  for (const tone of tones) {
+    warning[tone] = hexFromArgb(cp.warning.tone(tone));
+  }
 
   const error = createBlankTonalPalette();
   for (const tone of tones) {
-    tertiary[tone] = hexFromArgb(cp.error.tone(tone));
+    error[tone] = hexFromArgb(cp.error.tone(tone));
   }
 
   const neutral = createBlankTonalPalette();
   for (const tone of tones) {
-    tertiary[tone] = hexFromArgb(cp.n1.tone(tone));
+    neutral[tone] = hexFromArgb(cp.n1.tone(tone));
   }
 
   const neutralVariant = createBlankTonalPalette();
   for (const tone of tones) {
-    tertiary[tone] = hexFromArgb(cp.n2.tone(tone));
+    neutralVariant[tone] = hexFromArgb(cp.n2.tone(tone));
   }
 
   return {

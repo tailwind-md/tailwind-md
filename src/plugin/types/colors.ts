@@ -26,7 +26,7 @@ export type BaseColors =
   | BaseSemanticColors
   | BaseNeutralColors;
 
-export type SystemAccentColor<AccentColor extends string> = Record<
+export type AccentColor<AccentColor extends string> = Record<
   | `${AccentColor}`
   | `on${Capitalize<AccentColor>}`
   | `${AccentColor}Container`

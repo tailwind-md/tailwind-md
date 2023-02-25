@@ -31,6 +31,8 @@ export class CorePalette {
   readonly n1: TonalPalette;
   readonly n2: TonalPalette;
   readonly error: TonalPalette;
+  readonly warning: TonalPalette;
+  readonly success: TonalPalette;
 
   /**
    * @param argb ARGB representation of a color
@@ -64,5 +66,7 @@ export class CorePalette {
       this.n2 = TonalPalette.fromHueAndChroma(hue, 8);
     }
     this.error = TonalPalette.fromHueAndChroma(25, 84);
+    this.warning = TonalPalette.fromHueAndChroma(91, 48);
+    this.success = TonalPalette.fromHueAndChroma(127, 61);
   }
 }
