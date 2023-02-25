@@ -26,7 +26,7 @@ export type BaseColors =
   | BaseSemanticColors
   | BaseNeutralColors;
 
-export type AccentColor<AccentColor extends string> = Record<
+export type SystemKeyColor<AccentColor extends string> = Record<
   | `${AccentColor}`
   | `on${Capitalize<AccentColor>}`
   | `${AccentColor}Container`
@@ -34,8 +34,38 @@ export type AccentColor<AccentColor extends string> = Record<
   string
 >;
 
-export type BaseReferenceColorPalatte = Record<BaseColors, TonalPalette>;
+export type BaseSystemNeutralColors = {
+  surface: string;
+  onSurface: string;
+  surfaceVariant: string;
+  onSurfaceVariant: string;
+  background: string;
+  onBackground: string;
+  outline: string;
+  outlineVariant: string;
+};
 
-export type BaseSystemColorPalatte = AccentColor<
-  "primary" | "secondary" | "tertiary" | "success" | "warning" | "error"
->;
+export type BaseSystemKeyColors =
+  | SystemKeyColor<"primary">
+  | SystemKeyColor<"secondary">
+  | SystemKeyColor<"tertiary">
+  | SystemKeyColor<"success">
+  | SystemKeyColor<"warning">
+  | SystemKeyColor<"error">;
+
+export type BaseSystemExtraColors = {
+  scrim: string;
+  shadow: string;
+  surfaceTint: string;
+  inversePrimary: string;
+  inverseSurface: string;
+  inverseOnSurface: string;
+  black: string;
+  white: string;
+};
+
+export type BaseReferencePalette = Record<BaseColors, TonalPalette>;
+
+export type BaseSystemColors = BaseSystemKeyColors &
+  BaseSystemNeutralColors &
+  BaseSystemExtraColors;

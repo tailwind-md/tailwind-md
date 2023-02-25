@@ -1,7 +1,8 @@
 import plugin from "tailwindcss/plugin";
-import type { BaseColors, AccentColor } from "./types";
+import type { BaseColors, BaseSystemColors } from "./types";
 import {
   corePaletteToReferencePalette,
+  createSystemColors,
   deepMerge,
   flattenProperties,
   toCSSVariables,
@@ -9,13 +10,7 @@ import {
 import { argbFromHex, CorePalette } from "./material-color";
 
 export type Material3Options = {
-  systemColors?: Record<string, string> &
-    Partial<AccentColor<"primary">> &
-    Partial<AccentColor<"secondary">> &
-    Partial<AccentColor<"tertiary">> &
-    Partial<AccentColor<"success">> &
-    Partial<AccentColor<"warning">> &
-    Partial<AccentColor<"error">>;
+  systemColors?: Partial<BaseSystemColors>;
 
   seedReferenceKeyColors?: Record<string, string> &
     Partial<Record<BaseColors, string>>;
@@ -42,7 +37,10 @@ const tailwindPlugin = plugin.withOptions<Material3Options>(
       addBase({
         "*": toCSSVariables(
           flattenProperties({
-            m3: { ref: { color: colorRefPalette }, sys: {} },
+            m3: {
+              ref: { palette: colorRefPalette },
+              sys: { color: createSystemColors() },
+            },
           }),
         ),
       });

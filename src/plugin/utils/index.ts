@@ -1,20 +1,16 @@
 import { hexFromArgb, type CorePalette } from "$plugin/material-color";
 import type {
-  BaseReferenceColorPalatte,
+  BaseReferencePalette,
+  BaseSystemColors,
+  SystemKeyColor,
   TonalPalette,
   Tones,
 } from "$plugin/types";
 
-export function camelToSnakeCase(snake: string): string {
-  return /^([A-Z])/.test(snake)
-    ? snake
-    : snake.replace(/([a-z])([A-Z]|[0-9])/g, "$1_$2").toLowerCase();
-}
-
 export function camelToKebabCase(snake: string): string {
   return /^([A-Z])/.test(snake)
     ? snake
-    : snake.replace(/([a-z])([A-Z]|[0-9])/g, "$1-$2").toLowerCase();
+    : snake.replace(/([a-z]+|(?:[a-z]+[0-9]+))([A-Z])/g, "$1-$2").toLowerCase();
 }
 
 export function toCSSVariables(
@@ -32,15 +28,18 @@ function flattenObject(
   o: Record<string, unknown>,
 ): Record<string, unknown> {
   const flattened: Record<string, unknown> = {};
+
   for (const [k, v] of Object.entries(o)) {
+    const key = `${pre}${pre === "" ? k : capitalize(k)}`;
+
     if (typeof v === "object") {
       for (const [k2, v2] of Object.entries(
-        flattenObject(k, v as Record<string, unknown>),
+        flattenObject(key, v as Record<string, unknown>),
       )) {
         flattened[k2] = v2;
       }
     } else {
-      flattened[`${pre}${pre === "" ? k : capitalize(k)}`] = v;
+      flattened[key] = v;
     }
   }
 
@@ -53,8 +52,8 @@ export function flattenProperties(
   return flattenObject("", o);
 }
 
-export function capitalize(s: string): string {
-  return s[0].toUpperCase() + s.slice(1);
+export function capitalize<S extends string>(s: S): Capitalize<S> {
+  return (s[0].toUpperCase() + s.slice(1)) as unknown as Capitalize<S>;
 }
 
 export function createAccentColorClasses(accentColors: string[]) {
@@ -122,9 +121,85 @@ function createBlankTonalPalette(): TonalPalette {
   };
 }
 
+function switchMode<V>(mode: "light" | "dark", lightValue: V, darkValue: V): V {
+  return mode === "light" ? lightValue : darkValue;
+}
+
+function createSystemKeyColors<C extends string>(
+  color: C,
+  mode: "light" | "dark" = "light",
+): SystemKeyColor<C> {
+  return {
+    [`${color}`]: `var(--m3-ref-palette-${color}${switchMode(mode, 40, 80)})`,
+    [`on${capitalize(color)}`]: `var(--m3-ref-palette-${color}${switchMode(
+      mode,
+      100,
+      20,
+    )})`,
+    [`${color}Container`]: `var(--m3-ref-palette-${color}${switchMode(
+      mode,
+      90,
+      30,
+    )})`,
+    [`on${capitalize(
+      color,
+    )}Container`]: `var(--m3-ref-palette-${color}${switchMode(mode, 10, 90)})`,
+  } as unknown as SystemKeyColor<C>;
+}
+
+export function createSystemColors(
+  mode: "light" | "dark" = "light",
+): BaseSystemColors {
+  return {
+    // Neutrals
+    outline: `var(--m3-ref-palette-neutral-variant${switchMode(mode, 50, 60)})`,
+    outlineVariant: `var(--m3-ref-palette-neutral-variant${switchMode(
+      mode,
+      80,
+      30,
+    )})`,
+    surface: `var(--m3-ref-palette-neutral${switchMode(mode, 99, 10)})`,
+    onSurface: `var(--m3-ref-palette-neutral${switchMode(mode, 10, 90)})`,
+    surfaceVariant: `var(--m3-ref-palette-neutral-variant${switchMode(
+      mode,
+      90,
+      30,
+    )})`,
+    onSurfaceVariant: `var(--m3-ref-palette-neutral-variant${switchMode(
+      mode,
+      30,
+      80,
+    )})`,
+    background: `var(--m3-ref-palette-neutral${switchMode(mode, 99, 10)})`,
+    onBackground: `var(--m3-ref-palette-neutral${switchMode(mode, 10, 90)})`,
+
+    // Key colors
+    ...createSystemKeyColors("primary", mode),
+    ...createSystemKeyColors("secondary", mode),
+    ...createSystemKeyColors("tertiary", mode),
+    ...createSystemKeyColors("success", mode),
+    ...createSystemKeyColors("warning", mode),
+    ...createSystemKeyColors("error", mode),
+
+    // Extras
+    white: "var(--m3-ref-palette-neutral100)",
+    black: "var(--m3-ref-palette-neutral0)",
+    scrim: "var(--m3-ref-palette-neutral0)",
+    shadow: "var(--m3-ref-palette-neutral0)",
+    inversePrimary: `var(--m3-ref-palette-primary${switchMode(mode, 80, 40)})`,
+    inverseSurface: `var(--m3-ref-palette-neutral${switchMode(mode, 20, 90)})`,
+    inverseOnSurface: `var(--m3-ref-palette-neutral${switchMode(
+      mode,
+      95,
+      20,
+    )})`,
+    surfaceTint: `var(--m3-sys-color-primary)`,
+  };
+}
+
 export function corePaletteToReferencePalette(
   cp: CorePalette,
-): BaseReferenceColorPalatte {
+): BaseReferencePalette {
   const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 
   const primary = createBlankTonalPalette();
