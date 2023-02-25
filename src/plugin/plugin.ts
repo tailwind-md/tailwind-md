@@ -14,7 +14,7 @@ import {
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignOptions>>(
   (opts) => {
     return ({ addBase }) => {
-      // add base CSS variables
+      // add base
       const md = materialDesignTheme(opts);
 
       addBase({
@@ -50,6 +50,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignOptions>>(
     return {
       theme: {
         colors,
+        borderRadius: {},
       },
     };
   },

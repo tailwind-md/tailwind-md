@@ -1,15 +1,16 @@
 import {
   hexFromArgb,
-  type CorePalette,
+  CorePalette,
   TonalPalette as OldTonalPalette,
   argbFromHex,
 } from "$plugin/material-color";
 import type {
   BaseReferencePalette,
-  BaseSystemColors,
+  BaseColorScheme,
   SystemKeyColor,
   TonalPalette,
   Tones,
+  BaseColors,
 } from "$plugin/types";
 
 export function camelToKebabCase(snake: string): string {
@@ -147,9 +148,9 @@ export function toTailwindColorsWithAlpha(
   return x;
 }
 
-export function createSystemColors(
+export function createColorScheme(
   mode: "light" | "dark" = "light",
-): BaseSystemColors {
+): BaseColorScheme {
   return {
     // Neutrals
     outline: `var(--md-ref-palette-neutral-variant${switchMode(mode, 50, 60)})`,
@@ -197,9 +198,8 @@ export function createSystemColors(
   };
 }
 
-export function corePaletteToReferencePalette(
-  cp: CorePalette,
-): BaseReferencePalette {
+export function createReferencePalette(hex: string): BaseReferencePalette {
+  const cp = CorePalette.of(argbFromHex(hex));
   const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 
   const primary = createBlankTonalPalette();
@@ -353,4 +353,35 @@ export function createTonalPalette(hex: string): TonalPalette {
     99: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(99))),
     100: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(100))),
   };
+}
+
+export function createCustomReferencePalatte(
+  o: Partial<Record<BaseColors, string>>,
+): Partial<Record<BaseColors, TonalPalette>> {
+  const x: Partial<Record<BaseColors, TonalPalette>> = {};
+
+  for (const [k, v] of Object.entries(o)) {
+    x[k] = createTonalPalette(v);
+  }
+
+  return x;
+}
+
+type CustomColors = {
+  ref: { palatte: Record<string, TonalPalette> };
+  sys: { color: Record<string, string> };
+};
+
+export function createCustomColors(
+  o: Record<string, string>,
+  mode: "light" | "dark" = "light",
+): CustomColors {
+  const x: CustomColors = { ref: { palatte: {} }, sys: { color: {} } };
+
+  for (const [k, v] of Object.entries(o)) {
+    x.ref.palatte[k] = createTonalPalette(v);
+    x.sys.color = { ...x.sys.color, ...createSystemKeyColors(k, mode) };
+  }
+
+  return x;
 }

@@ -1,38 +1,41 @@
-import { argbFromHex, CorePalette } from "$plugin/material-color";
 import type {
   BaseColors,
   BaseReferencePalette,
-  BaseSystemColors,
+  BaseColorScheme,
 } from "$plugin/types";
 import {
-  corePaletteToReferencePalette,
-  createSystemColors,
+  createReferencePalette,
+  createColorScheme,
   deepEqual,
   deepMerge,
   objectHexToRGBSpaceSeparated,
+  createCustomReferencePalatte,
+  createCustomColors,
 } from "$plugin/utils";
 
 export type MaterialDesignOptions = {
-  systemColors?: Partial<BaseSystemColors>;
+  color?: {
+    seed?: string;
+    seedReferencePalette?: Partial<Record<BaseColors, string>>;
+    custom?: Record<string, string>;
+    scheme?: Partial<BaseColorScheme>;
+  };
 
-  seedReferencePalette?: { extended?: Record<string, string> } & Partial<
-    Record<BaseColors, string>
-  >;
-
-  seedColor?: string;
   emitReferenceClasses?: boolean;
 };
 
-const defaultOptions: Required<MaterialDesignOptions> = {
-  seedColor: "#6750a4",
-  systemColors: {},
-  seedReferencePalette: {},
+const defaultOptions = {
+  color: {
+    seed: "#6750a4",
+    scheme: {},
+    seedReferencePalette: {},
+  },
   emitReferenceClasses: false,
-};
+} satisfies Required<MaterialDesignOptions>;
 
 type MaterialDesignTheme = {
   ref: { palette: BaseReferencePalette };
-  sys: { color: BaseSystemColors };
+  sys: { color: BaseColorScheme };
 };
 
 let _mdt: MaterialDesignTheme | undefined;
@@ -47,19 +50,29 @@ export function materialDesignTheme(
 
   _lastOpts = opts;
 
-  opts = deepMerge(defaultOptions, opts ?? {});
-  const corePalette = CorePalette.of(argbFromHex(opts.seedColor));
+  opts = deepMerge(
+    defaultOptions as Required<MaterialDesignOptions>,
+    opts ?? {},
+  );
 
   _mdt = deepMerge(
     {
       ref: {
-        palette: corePaletteToReferencePalette(corePalette),
+        palette: createReferencePalette(opts.color.seed),
       },
       sys: {
-        color: createSystemColors(),
+        color: createColorScheme(),
       },
     },
-    { sys: { color: objectHexToRGBSpaceSeparated(opts.systemColors) } },
+    {
+      ref: {
+        palette: createCustomReferencePalatte(
+          opts.color?.seedReferencePalette ?? {},
+        ),
+      },
+    },
+    { sys: { color: objectHexToRGBSpaceSeparated(opts.color.scheme) } },
+    { ...createCustomColors(opts.color.custom) },
   ) as unknown as MaterialDesignTheme;
 
   return _mdt;

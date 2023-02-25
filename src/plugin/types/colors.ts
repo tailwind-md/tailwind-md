@@ -66,6 +66,6 @@ export type BaseSystemExtraColors = {
 
 export type BaseReferencePalette = Record<BaseColors, TonalPalette>;
 
-export type BaseSystemColors = BaseSystemKeyColors &
+export type BaseColorScheme = BaseSystemKeyColors &
   BaseSystemNeutralColors &
   BaseSystemExtraColors;

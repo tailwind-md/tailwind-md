@@ -1,4 +1,4 @@
 export * from "./plugin";
-import material3 from "./plugin";
+import materialDesignPlugin from "./plugin";
 
-export default material3;
+export default materialDesignPlugin;
