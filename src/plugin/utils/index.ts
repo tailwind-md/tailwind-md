@@ -1,4 +1,8 @@
-import { hexFromArgb, type CorePalette } from "$plugin/material-color";
+import {
+  hexFromArgb,
+  type CorePalette,
+  TonalPalette as OldTonalPalette,
+} from "$plugin/material-color";
 import type {
   BaseReferencePalette,
   BaseSystemColors,
@@ -13,14 +17,32 @@ export function camelToKebabCase(snake: string): string {
     : snake.replace(/([a-z]+|(?:[a-z]+[0-9]+))([A-Z])/g, "$1-$2").toLowerCase();
 }
 
+function pref(p: string) {
+  return p === "" ? p : `${p}-`;
+}
+
 export function toCSSVariables(
   o: Record<string, unknown>,
+  prefix = "",
 ): Record<string, string> {
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    vars[`--${camelToKebabCase(key)}`] = `${value}`;
+    vars[`--${pref(prefix)}${camelToKebabCase(key)}`] = `${value}`;
   }
   return vars;
+}
+
+export function toClassNames<K extends unknown>(
+  o: Record<string, K>,
+  prefix = "",
+): Record<string, K> {
+  const c: Record<string, K> = {};
+
+  for (const [key, value] of Object.entries(o)) {
+    c[`${pref(prefix)}${camelToKebabCase(key)}`] = value;
+  }
+
+  return c;
 }
 
 function flattenObject(
@@ -54,53 +76,6 @@ export function flattenProperties(
 
 export function capitalize<S extends string>(s: S): Capitalize<S> {
   return (s[0].toUpperCase() + s.slice(1)) as unknown as Capitalize<S>;
-}
-
-export function createAccentColorClasses(accentColors: string[]) {
-  const colors: Record<string, Record<string, string> & { DEFAULT: string }> =
-    {};
-  for (const accentColor of accentColors) {
-    colors[`${accentColor}`] = { DEFAULT: `var(--sys-${accentColor})` };
-    colors[`on-${accentColor}`] = {
-      DEFAULT: `var(--sys-on-${accentColor})`,
-    };
-    colors[`${accentColor}-container`] = {
-      DEFAULT: `var(--sys-${accentColor}-container)`,
-    };
-    colors[`on-${accentColor}-container`] = {
-      DEFAULT: `var(--sys-on-${accentColor}-container)`,
-    };
-  }
-  return colors;
-}
-
-export function createSemanticColorClasses(accentColors: string[]) {
-  const colors: Record<string, Record<string, string> & { DEFAULT: string }> =
-    {};
-  for (const accentColor of accentColors) {
-    colors[`${accentColor}`] = { DEFAULT: `var(--sys-${accentColor})` };
-    colors[`on-${accentColor}`] = {
-      DEFAULT: `var(--sys-on-${accentColor})`,
-    };
-    colors[`${accentColor}-container`] = {
-      DEFAULT: `var(--sys-${accentColor}-container)`,
-    };
-    colors[`on-${accentColor}-container`] = {
-      DEFAULT: `var(--sys-on-${accentColor}-container)`,
-    };
-  }
-  return colors;
-}
-
-export function createSystemNeutralColorClasses() {
-  return {
-    background: { DEFAULT: "var(--sys-background)" },
-    "on-background": { DEFAULT: "var(--sys-on-background)" },
-    "on-surface": { DEFAULT: "var(--sys-surface)" },
-    "on-surface-variant": { DEFAULT: "var(--sys-on-surface)" },
-    outline: { DEFAULT: "var(--sys-outline)" },
-    "outline-variant": { DEFAULT: "var(--sys-outline-variant)" },
-  };
 }
 
 function createBlankTonalPalette(): TonalPalette {
@@ -145,6 +120,30 @@ function createSystemKeyColors<C extends string>(
       color,
     )}Container`]: `var(--m3-ref-palette-${color}${switchMode(mode, 10, 90)})`,
   } as unknown as SystemKeyColor<C>;
+}
+
+export function toTailwindColorsWithAlpha(
+  o: Record<string, string | TonalPalette>,
+  prefix = "",
+): Record<string, string | TonalPalette> {
+  const x: Record<string, string | TonalPalette> = {};
+
+  for (const [k, v] of Object.entries(o)) {
+    if (typeof v === "string") {
+      x[k] = `rgb(var(--${pref(prefix)}${camelToKebabCase(
+        k,
+      )}) / <alpha-value>)`;
+    } else {
+      x[k] = createBlankTonalPalette();
+      for (const [k2] of Object.entries(v)) {
+        x[k][k2] = `rgb(var(--${pref(prefix)}${camelToKebabCase(
+          k,
+        )}${k2}) / <alpha-value>)`;
+      }
+    }
+  }
+
+  return x;
 }
 
 export function createSystemColors(
@@ -203,43 +202,43 @@ export function corePaletteToReferencePalette(
   const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
 
   const primary = createBlankTonalPalette();
-  for (const tone of tones) {
-    primary[tone] = hexFromArgb(cp.a1.tone(tone));
-  }
-
   const secondary = createBlankTonalPalette();
-  for (const tone of tones) {
-    secondary[tone] = hexFromArgb(cp.a2.tone(tone));
-  }
-
   const tertiary = createBlankTonalPalette();
-  for (const tone of tones) {
-    tertiary[tone] = hexFromArgb(cp.a3.tone(tone));
-  }
-
   const success = createBlankTonalPalette();
-  for (const tone of tones) {
-    success[tone] = hexFromArgb(cp.success.tone(tone));
-  }
-
   const warning = createBlankTonalPalette();
-  for (const tone of tones) {
-    warning[tone] = hexFromArgb(cp.warning.tone(tone));
-  }
-
   const error = createBlankTonalPalette();
-  for (const tone of tones) {
-    error[tone] = hexFromArgb(cp.error.tone(tone));
-  }
-
   const neutral = createBlankTonalPalette();
-  for (const tone of tones) {
-    neutral[tone] = hexFromArgb(cp.n1.tone(tone));
-  }
-
   const neutralVariant = createBlankTonalPalette();
-  for (const tone of tones) {
-    neutralVariant[tone] = hexFromArgb(cp.n2.tone(tone));
+
+  const x = [
+    primary,
+    secondary,
+    tertiary,
+    success,
+    warning,
+    error,
+    neutral,
+    neutralVariant,
+  ];
+
+  const y = [
+    cp.a1,
+    cp.a2,
+    cp.a3,
+    cp.success,
+    cp.warning,
+    cp.error,
+    cp.n1,
+    cp.n2,
+  ];
+
+  for (const [a, b] of x.map<[TonalPalette, OldTonalPalette]>((x, i) => [
+    x,
+    y[i],
+  ])) {
+    for (const t of tones) {
+      a[t] = hexToRGBSpaceSeparated(hexFromArgb(b.tone(t)));
+    }
   }
 
   return {
@@ -254,7 +253,7 @@ export function corePaletteToReferencePalette(
   };
 }
 
-export function deepMerge<T extends object>(o1: T, o2: T): T {
+function deepMergeImpl<T extends object>(o1: T, o2: T): T {
   const merged: T = { ...o1 };
   for (const [key, value] of Object.entries(o2)) {
     if (typeof value === "object") {
@@ -269,4 +268,56 @@ export function deepMerge<T extends object>(o1: T, o2: T): T {
   }
 
   return merged;
+}
+export function deepMerge<T extends object>(o1: T, ...rest: T[]): T {
+  let merged: T = { ...o1 };
+
+  for (const o of rest) {
+    merged = deepMergeImpl(merged, o);
+  }
+
+  return merged;
+}
+
+export function hexToRGB(h: string): [number, number, number] {
+  const r = parseInt(h[1] + h[2], 16);
+  const g = parseInt(h[3] + h[4], 16);
+  const b = parseInt(h[5] + h[6], 16);
+
+  return [r, g, b];
+}
+
+export function hexToRGBSpaceSeparated(
+  h: string,
+): `${number} ${number} ${number}` {
+  const [r, g, b] = hexToRGB(h);
+
+  return `${r} ${g} ${b}`;
+}
+
+export function deepEqual<T1 extends object, T2 extends object>(
+  o1: T1,
+  o2: T2,
+): boolean {
+  if (typeof o1 !== typeof o2) {
+    return false;
+  }
+
+  for (const [key, value] of Object.entries(o2)) {
+    if (typeof value === "object") {
+      if (typeof o1[key] === "object") {
+        if (!deepEqual(o1[key] as T1, value as T2)) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      if (o1[key] !== value) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
