@@ -1,5 +1,5 @@
 {
-  "name": "@rencedm112/tailwind-m3",
+  "name": "@rencedm112/tailwind-md",
   "private": false,
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",

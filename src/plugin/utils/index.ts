@@ -106,20 +106,20 @@ function createSystemKeyColors<C extends string>(
   mode: "light" | "dark" = "light",
 ): SystemKeyColor<C> {
   return {
-    [`${color}`]: `var(--m3-ref-palette-${color}${switchMode(mode, 40, 80)})`,
-    [`on${capitalize(color)}`]: `var(--m3-ref-palette-${color}${switchMode(
+    [`${color}`]: `var(--md-ref-palette-${color}${switchMode(mode, 40, 80)})`,
+    [`on${capitalize(color)}`]: `var(--md-ref-palette-${color}${switchMode(
       mode,
       100,
       20,
     )})`,
-    [`${color}Container`]: `var(--m3-ref-palette-${color}${switchMode(
+    [`${color}Container`]: `var(--md-ref-palette-${color}${switchMode(
       mode,
       90,
       30,
     )})`,
     [`on${capitalize(
       color,
-    )}Container`]: `var(--m3-ref-palette-${color}${switchMode(mode, 10, 90)})`,
+    )}Container`]: `var(--md-ref-palette-${color}${switchMode(mode, 10, 90)})`,
   } as unknown as SystemKeyColor<C>;
 }
 
@@ -152,26 +152,26 @@ export function createSystemColors(
 ): BaseSystemColors {
   return {
     // Neutrals
-    outline: `var(--m3-ref-palette-neutral-variant${switchMode(mode, 50, 60)})`,
-    outlineVariant: `var(--m3-ref-palette-neutral-variant${switchMode(
+    outline: `var(--md-ref-palette-neutral-variant${switchMode(mode, 50, 60)})`,
+    outlineVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
       80,
       30,
     )})`,
-    surface: `var(--m3-ref-palette-neutral${switchMode(mode, 99, 10)})`,
-    onSurface: `var(--m3-ref-palette-neutral${switchMode(mode, 10, 90)})`,
-    surfaceVariant: `var(--m3-ref-palette-neutral-variant${switchMode(
+    surface: `var(--md-ref-palette-neutral${switchMode(mode, 99, 10)})`,
+    onSurface: `var(--md-ref-palette-neutral${switchMode(mode, 10, 90)})`,
+    surfaceVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
       90,
       30,
     )})`,
-    onSurfaceVariant: `var(--m3-ref-palette-neutral-variant${switchMode(
+    onSurfaceVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
       30,
       80,
     )})`,
-    background: `var(--m3-ref-palette-neutral${switchMode(mode, 99, 10)})`,
-    onBackground: `var(--m3-ref-palette-neutral${switchMode(mode, 10, 90)})`,
+    background: `var(--md-ref-palette-neutral${switchMode(mode, 99, 10)})`,
+    onBackground: `var(--md-ref-palette-neutral${switchMode(mode, 10, 90)})`,
 
     // Key colors
     ...createSystemKeyColors("primary", mode),
@@ -182,18 +182,18 @@ export function createSystemColors(
     ...createSystemKeyColors("error", mode),
 
     // Extras
-    white: "var(--m3-ref-palette-neutral100)",
-    black: "var(--m3-ref-palette-neutral0)",
-    scrim: "var(--m3-ref-palette-neutral0)",
-    shadow: "var(--m3-ref-palette-neutral0)",
-    inversePrimary: `var(--m3-ref-palette-primary${switchMode(mode, 80, 40)})`,
-    inverseSurface: `var(--m3-ref-palette-neutral${switchMode(mode, 20, 90)})`,
-    inverseOnSurface: `var(--m3-ref-palette-neutral${switchMode(
+    white: "var(--md-ref-palette-neutral100)",
+    black: "var(--md-ref-palette-neutral0)",
+    scrim: "var(--md-ref-palette-neutral0)",
+    shadow: "var(--md-ref-palette-neutral0)",
+    inversePrimary: `var(--md-ref-palette-primary${switchMode(mode, 80, 40)})`,
+    inverseSurface: `var(--md-ref-palette-neutral${switchMode(mode, 20, 90)})`,
+    inverseOnSurface: `var(--md-ref-palette-neutral${switchMode(
       mode,
       95,
       20,
     )})`,
-    surfaceTint: `var(--m3-sys-color-primary)`,
+    surfaceTint: `var(--md-sys-color-primary)`,
   };
 }
 

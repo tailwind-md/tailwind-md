@@ -5,5 +5,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [material3({})],
+  plugins: [material3({ seedColor: "3E5BA9" })],
 };
