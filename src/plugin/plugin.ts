@@ -1,7 +1,7 @@
 import plugin from "tailwindcss/plugin";
 import type { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
-import { materialDesignTheme, type MaterialDesignOptions } from "./theme";
-export type * from "./theme";
+import { materialDesignTheme, type MaterialDesignConfig } from "./theme";
+export type { MaterialDesignConfig } from "./theme";
 import {
   flattenProperties,
   toCSSVariables,
@@ -12,7 +12,7 @@ import {
 
 type RTKVP = ResolvableTo<KeyValuePair<string, string>>;
 
-const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignOptions>>(
+const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
     return ({ addBase }) => {
       // add base

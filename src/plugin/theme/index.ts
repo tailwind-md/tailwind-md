@@ -17,7 +17,7 @@ import {
   type DeepRequired,
 } from "$plugin/utils";
 
-export type MaterialDesignOptions = {
+export type MaterialDesignConfig = {
   color?: {
     seed?: string;
     seedReferencePalette?: Partial<Record<BaseColor, string>>;
@@ -40,7 +40,7 @@ export const materialDefaultOptions = {
     scheme: {},
     seedReferencePalette: {},
     custom: {},
-  } satisfies Required<MaterialDesignOptions["color"]>,
+  } satisfies Required<MaterialDesignConfig["color"]>,
   state: {
     hover: {
       contentOpacity: "100%",
@@ -188,7 +188,7 @@ export const materialDefaultOptions = {
     },
   },
   emitReferenceClasses: false,
-} satisfies Required<MaterialDesignOptions>;
+} satisfies Required<MaterialDesignConfig>;
 
 type MaterialDesignTheme = {
   ref: { palette: ReferencePalette };
@@ -201,10 +201,10 @@ type MaterialDesignTheme = {
 };
 
 let _mdt: MaterialDesignTheme | undefined;
-let _lastOpts: MaterialDesignOptions | undefined;
+let _lastOpts: MaterialDesignConfig | undefined;
 
 export function materialDesignTheme(
-  opts: MaterialDesignOptions,
+  opts: MaterialDesignConfig,
 ): MaterialDesignTheme {
   if (_mdt && deepEqual(_lastOpts, opts ?? {})) {
     return _mdt;
@@ -213,7 +213,7 @@ export function materialDesignTheme(
   _lastOpts = opts;
 
   opts = deepMerge(
-    materialDefaultOptions as Required<MaterialDesignOptions>,
+    materialDefaultOptions as Required<MaterialDesignConfig>,
     opts ?? {},
   );
 
