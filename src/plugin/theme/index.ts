@@ -57,7 +57,17 @@ export const materialDefaultOptions = {
       },
       enabled: {
         contentOpacity: "100%",
-        stateLayerOpacity: "12%",
+        stateLayerOpacity: "0%",
+        containerOpacity: "100%",
+      },
+      activated: {
+        contentOpacity: "100%",
+        stateLayerOpacity: "0%",
+        containerOpacity: "100%",
+      },
+      selected: {
+        contentOpacity: "100%",
+        stateLayerOpacity: "0%",
         containerOpacity: "100%",
       },
       pressed: {
