@@ -7,10 +7,12 @@ module.exports = {
   },
   plugins: [
     material3({
-      color: {
-        seed: "3E5BA9",
-        seedReferencePalette: { primary: "#FFC0CB" },
-        custom: { red: "#FF0000" },
+      theme: {
+        color: {
+          seed: "3E5BA9",
+          seedReferencePalette: { primary: "#FFC0CB" },
+          custom: { red: "#FF0000" },
+        },
       },
     }),
   ],

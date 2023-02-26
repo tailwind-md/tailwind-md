@@ -5,9 +5,12 @@ export type State = {
 };
 
 export type States = {
-  hover: State;
-  focus: State;
+  hovered: State;
+  focused: State;
   pressed: State;
   dragged: State;
   disabled: State;
+  selected: State;
+  activated: State;
+  enabled: State;
 };
