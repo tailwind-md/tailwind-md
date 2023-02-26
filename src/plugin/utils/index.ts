@@ -444,7 +444,7 @@ export function createCustomReferencePalatte(
 }
 
 type CustomColors = {
-  ref: { palatte: Record<string, TonalPalette> };
+  ref: { palette: Record<string, TonalPalette> };
   sys: { color: Record<string, string> };
 };
 
@@ -452,10 +452,10 @@ export function createCustomColors(
   o: Record<string, string>,
   mode: "light" | "dark" = "light",
 ): CustomColors {
-  const x: CustomColors = { ref: { palatte: {} }, sys: { color: {} } };
+  const x: CustomColors = { ref: { palette: {} }, sys: { color: {} } };
 
   for (const [k, v] of Object.entries(o)) {
-    x.ref.palatte[k] = createTonalPalette(v);
+    x.ref.palette[k] = createTonalPalette(v);
     x.sys.color = { ...x.sys.color, ...createSystemKeyColors(k, mode) };
   }
 
