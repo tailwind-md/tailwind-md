@@ -9,9 +9,7 @@ module.exports = {
     material3({
       theme: {
         color: {
-          seed: "3E5BA9",
-          seedReferencePalette: { primary: "#FFC0CB" },
-          custom: { red: "#FF0000" },
+          seed: "#0070C9",
         },
       },
     }),
