@@ -4,7 +4,11 @@ import { materialDesignTheme, type MaterialDesignConfig } from "./theme";
 export type { MaterialDesignConfig } from "./theme";
 import {
   flattenProperties,
+  shadowPenumbra,
+  shadowUmbra,
+  surfaceTintOpacity,
   toCSSVariables,
+  toTailwindBoxShadowTheme,
   toTailwindColorTheme,
   toTailwindFontSizeTheme,
   toTailwindTheme,
@@ -16,42 +20,127 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
     return ({ addBase }) => {
       // add base
-      const md = materialDesignTheme(opts);
+      const { theme: md, mergedConfig: conf } = materialDesignTheme(opts);
+
+      const color = { ...md.sys.color };
+      delete md.sys.color;
+
+      const els = md.sys.elevation;
+
+      delete md.sys.elevation;
+
+      const elevations: Record<
+        string,
+        {
+          surfaceTintOpacity: string;
+          shadowUmbra: string;
+          shadowPenumbra: string;
+        }
+      > = {};
+
+      for (const [key, value] of Object.entries(els)) {
+        const umbra = shadowUmbra(value);
+        const penumbra = shadowPenumbra(value);
+        elevations[key] = {
+          surfaceTintOpacity: `${surfaceTintOpacity(value)}%`,
+          shadowUmbra: `${umbra.xOffset} ${umbra.yOffset} ${umbra.blurRadius} ${umbra.spreadRadius}`,
+          shadowPenumbra: `${penumbra.xOffset} ${penumbra.yOffset} ${penumbra.blurRadius} ${penumbra.spreadRadius}`,
+        };
+      }
 
       addBase({
         "*": toCSSVariables(
           flattenProperties({
-            md: md,
+            md,
           }),
         ),
       });
+
+      addBase({
+        "*": toCSSVariables(
+          flattenProperties({
+            md: {
+              sys: {
+                elevation: elevations,
+              },
+            },
+          }),
+        ),
+      });
+
+      addBase({
+        ":root": toCSSVariables(
+          flattenProperties({
+            md: {
+              sys: {
+                color: color[conf.theme.color.defaultThemeMode],
+              },
+            },
+          }),
+        ),
+      });
+
+      const themeModes = conf.theme.color.generateThemeModes;
+
+      for (const themeMode of themeModes) {
+        if (conf.theme.color.themeModeSwitchMethod === "class") {
+          addBase({
+            [`.${themeMode}`]: toCSSVariables(
+              flattenProperties({
+                md: {
+                  sys: {
+                    color: color[themeMode],
+                  },
+                },
+              }),
+            ),
+          });
+        } else {
+          addBase({
+            [`[data-theme-mode="${themeMode}"]`]: toCSSVariables(
+              flattenProperties({
+                md: {
+                  sys: {
+                    color: color[themeMode],
+                  },
+                },
+              }),
+            ),
+          });
+        }
+      }
     };
   },
   (opts) => {
-    const mt = materialDesignTheme(opts);
+    const { theme: md } = materialDesignTheme(opts);
 
-    let colors = toTailwindColorTheme(mt.sys.color, {
+    let colors = toTailwindColorTheme(md.sys.color.light, {
       prefix: "md-sys-color",
     });
 
-    const opacity = toTailwindTheme(flattenProperties(mt.sys.state), {
+    let opacity = toTailwindTheme(flattenProperties(md.sys.state), {
       prefix: "md-sys-state",
       createKey: (k) => k.replace("Opacity", ""),
     }) as unknown as RTKVP;
 
-    const borderRadius = toTailwindTheme(mt.sys.shape.corner, {
+    const borderRadius = toTailwindTheme(md.sys.shape.corner, {
       prefix: "md-sys-shape-corner",
     });
 
-    const fontSize = toTailwindFontSizeTheme(mt.sys.typescale, {
+    const fontSize = toTailwindFontSizeTheme(md.sys.typescale, {
       prefix: "md-sys-typescale",
+    });
+
+    const boxShadow = toTailwindBoxShadowTheme(md.sys.elevation, {
+      prefix: "md-sys-elevation",
+      createKey: (k) => `elevation-${k}`,
     });
 
     if (opts?.emitReferenceClasses) {
       colors = {
         ...colors,
 
-        ...toTailwindColorTheme(mt.ref.palette, {
+        ...toTailwindColorTheme(md.ref.palette, {
           prefix: "md-ref-palette",
         }),
       };
@@ -59,10 +148,13 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
     return {
       theme: {
-        colors,
-        borderRadius,
-        opacity,
-        fontSize,
+        extend: {
+          colors,
+          borderRadius,
+          boxShadow,
+          opacity,
+          fontSize,
+        },
       },
     };
   },

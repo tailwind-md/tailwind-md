@@ -12,7 +12,10 @@ import type {
   Tones,
   BaseColor,
   FontStyle,
+  Elevation,
+  ElevationDistance,
 } from "$plugin/types";
+import type { DeepPartial } from "./types";
 
 export * from "./types";
 
@@ -41,7 +44,7 @@ export function camelToKebabCase(snake: string): string {
     : snake.replace(/([a-z]+|(?:[a-z]+[0-9]+))([A-Z])/g, "$1-$2").toLowerCase();
 }
 
-function pref(p: string) {
+function pf(p: string) {
   return p === "" ? p : `${p}-`;
 }
 
@@ -53,7 +56,7 @@ export function toCSSVariables(
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
     vars[
-      `--${pref(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`
+      `--${pf(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`
     ] = `${value}`;
   }
   return vars;
@@ -67,7 +70,7 @@ export function toClassNames<K extends unknown>(
   const c: Record<string, K> = {};
 
   for (const [key, value] of Object.entries(o)) {
-    c[`${pref(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`] =
+    c[`${pf(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`] =
       value;
   }
 
@@ -164,11 +167,11 @@ export function toTailwindColorTheme(
     const cssVar = camelToKebabCase(opts.createValue(k, v));
 
     if (typeof v === "string") {
-      x[newKey] = `rgb(var(--${pref(opts.prefix)}${cssVar}) / <alpha-value>)`;
+      x[newKey] = `rgb(var(--${pf(opts.prefix)}${cssVar}) / <alpha-value>)`;
     } else {
       x[newKey] = createBlankTonalPalette();
       for (const [k2] of Object.entries(v)) {
-        x[newKey][k2] = `rgb(var(--${pref(
+        x[newKey][k2] = `rgb(var(--${pf(
           opts.prefix,
         )}${cssVar}${k2}) / <alpha-value>)`;
       }
@@ -190,7 +193,7 @@ export function toTailwindTheme<V>(
   const x: Record<string, string> = {};
 
   for (let [k, v] of Object.entries(o)) {
-    x[camelToKebabCase(opts.createKey(k, v))] = `var(--${pref(
+    x[camelToKebabCase(opts.createKey(k, v))] = `var(--${pf(
       opts.prefix,
     )}${camelToKebabCase(opts.createValue(k, v))})`;
   }
@@ -209,7 +212,7 @@ export function toTailwindFontSizeTheme(
   const t: FontSizeTheme = {};
 
   for (const [k, v] of Object.entries(x)) {
-    const p = pref(opts.prefix);
+    const p = pf(opts.prefix);
     const cssVar = camelToKebabCase(opts.createValue(k, v));
     t[camelToKebabCase(opts.createKey(k, v))] = [
       `var(--${p}${cssVar}-size)`,
@@ -342,23 +345,37 @@ export function objectHexToRGBSpaceSeparated(
   return x;
 }
 
-function deepMergeImpl<T extends object>(o1: T, o2: T): T {
+function deepMergeImpl<T extends Record<string, unknown>>(
+  o1: T,
+  o2: DeepPartial<T>,
+): T {
   const merged: T = { ...o1 };
+
   for (const [key, value] of Object.entries(o2)) {
     if (typeof value === "object") {
       if (typeof merged[key] === "object") {
-        merged[key] = deepMerge(o1[key] as T, value as T);
+        merged[key as keyof T] = deepMergeImpl(
+          o1[key] as T,
+          value as T,
+        ) as T[keyof T];
       } else {
-        merged[key] = value;
+        if (value !== "undefined") {
+          merged[key as keyof T] = value;
+        }
       }
     } else {
-      merged[key] = value;
+      if (value !== "undefined") {
+        merged[key as keyof T] = value;
+      }
     }
   }
 
   return merged;
 }
-export function deepMerge<T extends object>(o1: T, ...rest: T[]): T {
+export function deepMerge<T extends Record<string, unknown>>(
+  o1: T,
+  ...rest: DeepPartial<T>[]
+): T {
   let merged: T = { ...o1 };
 
   for (const o of rest) {
@@ -460,4 +477,89 @@ export function createCustomColors(
   }
 
   return x;
+}
+
+export function surfaceTintOpacity(elevationLevel: ElevationDistance): number {
+  elevationLevel = parseInt(`${elevationLevel}`);
+
+  if (elevationLevel === 0) {
+    return 0;
+  }
+
+  return Math.round(
+    0.02 * elevationLevel ** 3 -
+      0.4686 * elevationLevel ** 2 +
+      3.8613 * elevationLevel +
+      0.5689,
+  );
+}
+
+type BoxShadow = {
+  xOffset: `${number}px`;
+  yOffset: `${number}px`;
+  blurRadius: `${number}px`;
+  spreadRadius: `${number}px`;
+};
+
+export function shadowUmbra(distance: ElevationDistance): BoxShadow {
+  distance = parseInt(`${distance}`);
+
+  return {
+    xOffset: "0px",
+    yOffset: `${Math.round(
+      distance === 0
+        ? 0
+        : 0.0054 * distance ** 3 -
+            0.0756 * distance ** 2 +
+            0.4406 * distance +
+            0.2473,
+    )}px`,
+    blurRadius: `${Math.round(
+      distance === 0
+        ? 0
+        : 0.0076 * distance - 0.1573 * distance + 1.0961 * distance + 0.3605,
+    )}px`,
+    spreadRadius: "0px",
+  };
+}
+
+export function shadowPenumbra(distance: ElevationDistance): BoxShadow {
+  distance = parseInt(`${distance}`);
+
+  return {
+    xOffset: "0px",
+    yOffset: `${Math.round(
+      distance === 0
+        ? 0
+        : -0.0032 * distance + 0.0533 * distance + 0.4782 * distance + 0.187,
+    )}px`,
+    blurRadius: `${Math.round(
+      distance === 0 ? 0 : -0.0637 * distance ** 2 + 1.6862 * distance + 0.7669,
+    )}px`,
+    spreadRadius: `${Math.round(
+      distance === 0
+        ? 0
+        : 0.0042 * distance ** 3 -
+            0.0783 * distance ** 2 +
+            0.8299 * distance +
+            0.0984,
+    )}px`,
+  };
+}
+export function toTailwindBoxShadowTheme(
+  elevation: Elevation,
+  opts?: ThemeTransformerOptions,
+): Record<string, string> {
+  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const t: Record<string, string> = {};
+
+  for (const [k, v] of Object.entries(elevation)) {
+    const p = pf(opts.prefix);
+    const cssVar = camelToKebabCase(opts.createValue(k, v));
+    t[
+      camelToKebabCase(opts.createKey(k, v))
+    ] = `var(--${p}${cssVar}-shadow-umbra) rgb(var(--md-sys-color-black) / 30%), var(--${p}${cssVar}-shadow-penumbra) rgb(var(--md-sys-color-black) / 15%)`;
+  }
+
+  return t;
 }

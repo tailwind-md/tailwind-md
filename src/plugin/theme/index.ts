@@ -1,11 +1,12 @@
 import type {
   BaseColor,
-  ReferencePalette as ReferencePalette,
-  SystemColorScheme as SystemColorScheme,
+  ReferencePalette,
+  SystemColorScheme,
   States,
   Typescale,
+  Elevation,
+  Shape,
 } from "$plugin/types";
-import type { Shape } from "$plugin/types/shape";
 import {
   createReferencePalette,
   createColorScheme,
@@ -23,8 +24,13 @@ export type MaterialDesignConfig = DeepPartial<{
       seed: string;
       seedReferencePalette: Record<BaseColor, string>;
       custom: Record<string, string>;
-      scheme: SystemColorScheme;
+      scheme: { light: SystemColorScheme; dark: SystemColorScheme };
+      defaultThemeMode: "light" | "dark";
+      generateThemeModes: ("light" | "dark")[];
+      themeModeSwitchMethod: "class" | "data-attribute";
     };
+
+    elevation: Elevation;
 
     state: States;
 
@@ -40,9 +46,12 @@ export const materialDefaultOptions = {
   theme: {
     color: {
       seed: "#6750a4",
-      scheme: {},
+      scheme: { light: {}, dark: {} },
       seedReferencePalette: {},
       custom: {},
+      defaultThemeMode: "light",
+      generateThemeModes: ["light", "dark"],
+      themeModeSwitchMethod: "class",
     } satisfies Required<MaterialDesignConfig["theme"]["color"]>,
     state: {
       hovered: {
@@ -86,6 +95,44 @@ export const materialDefaultOptions = {
         containerOpacity: "12%",
       },
     },
+    elevation: {
+      // level0: {
+      //   surfaceTintOpacity: "0%",
+      //   umbra: "0px 0px 0px 0px rgb(var(--md-sys-color-black) / 30%)",
+      //   penumbra: "0px 0px 0px 0px rgb(var(--md-sys-color-black) / 15%)",
+      // },
+      // level1: {
+      //   surfaceTintOpacity: "5%",
+      //   umbra: "0px 1px 2px 0px rgb(var(--md-sys-color-black) / 30%)",
+      //   penumbra: "0px 1px 3px 1px rgb(var(--md-sys-color-black) / 15%)",
+      // },
+      // level2: {
+      //   surfaceTintOpacity: "8%",
+      //   umbra: "0px 1px 2px 0px rgb(var(--md-sys-color-black) / 30%)",
+      //   penumbra: "0px 2px 6px 2px rgb(var(--md-sys-color-black) / 15%)",
+      // },
+      // level3: {
+      //   surfaceTintOpacity: "11%",
+      //   umbra: "0px 1px 3px 0px rgb(var(--md-sys-color-black) / 30%)",
+      //   penumbra: "0px 4px 8px 3px rgb(var(--md-sys-color-black) / 15%)",
+      // },
+      // level4: {
+      //   surfaceTintOpacity: "12%",
+      //   umbra: "0px 2px 3px 0px rgb(var(--md-sys-color-black) / 30%)",
+      //   penumbra: "0px 6px 10px 4px rgb(var(--md-sys-color-black) / 15%)",
+      // },
+      // level5: {
+      //   surfaceTintOpacity: "14%",
+      //   umbra: "0px 4px 4px 0px rgb(var(--md-sys-color-black) / 30%)",
+      //   penumbra: "0px 8px 12px 6px rgb(var(--md-sys-color-black) / 15%)",
+      // },
+      level0: "0px",
+      level1: "1px",
+      level2: "3px",
+      level3: "6px",
+      level4: "8px",
+      level5: "12px",
+    },
     shape: {
       corner: {
         none: "0px",
@@ -97,7 +144,6 @@ export const materialDefaultOptions = {
         full: "9999px",
       },
     },
-    // TODO: add typescale
     typescale: {
       displayLarge: {
         font: "Roboto",
@@ -206,58 +252,75 @@ export const materialDefaultOptions = {
       },
     },
   },
-  emitReferenceClasses: false,
+  emitReferenceClasses: false as boolean,
 } satisfies Required<MaterialDesignConfig>;
 
 type MaterialDesignTheme = {
   ref: { palette: ReferencePalette };
   sys: {
-    color: SystemColorScheme;
+    color: { light: SystemColorScheme; dark: SystemColorScheme };
     state: States;
     shape: Shape;
+    elevation: Elevation;
     typescale: Typescale;
   };
 };
 
+type MergedConfig = typeof materialDefaultOptions;
+
 let _mdt: MaterialDesignTheme | undefined;
 let _lastOpts: MaterialDesignConfig | undefined;
+let _lastMergedConfig: MergedConfig | undefined;
 
-export function materialDesignTheme(
-  opts: MaterialDesignConfig,
-): MaterialDesignTheme {
+export function materialDesignTheme(opts: MaterialDesignConfig): {
+  theme: MaterialDesignTheme;
+  mergedConfig: MergedConfig;
+} {
   if (_mdt && deepEqual(_lastOpts, opts ?? {})) {
-    return _mdt;
+    return { theme: _mdt, mergedConfig: _lastMergedConfig };
   }
 
   _lastOpts = opts;
 
-  opts = deepMerge(
-    materialDefaultOptions as Required<MaterialDesignConfig>,
-    opts ?? {},
-  );
+  _lastMergedConfig = deepMerge(materialDefaultOptions, opts ?? {});
 
   _mdt = deepMerge(
     {
       ref: {
-        palette: createReferencePalette(opts.theme.color.seed),
+        palette: createReferencePalette(_lastMergedConfig.theme.color.seed),
       },
       sys: {
-        color: createColorScheme(),
-        state: opts.theme.state,
-        shape: opts.theme.shape,
-        typescale: opts.theme.typescale,
+        color: {
+          light: createColorScheme("light"),
+          dark: createColorScheme("dark"),
+        },
+        state: _lastMergedConfig.theme.state,
+        shape: _lastMergedConfig.theme.shape,
+        typescale: _lastMergedConfig.theme.typescale,
+        elevation: _lastMergedConfig.theme.elevation,
       },
     },
     {
       ref: {
         palette: createCustomReferencePalatte(
-          opts.theme.color.seedReferencePalette ?? {},
+          _lastMergedConfig.theme.color.seedReferencePalette ?? {},
         ),
       },
     },
-    { sys: { color: objectHexToRGBSpaceSeparated(opts.theme.color.scheme) } },
-    { ...createCustomColors(opts.theme.color.custom) },
+    {
+      sys: {
+        color: {
+          light: objectHexToRGBSpaceSeparated(
+            _lastMergedConfig.theme.color.scheme.light,
+          ),
+          dark: objectHexToRGBSpaceSeparated(
+            _lastMergedConfig.theme.color.scheme.dark,
+          ),
+        },
+      },
+    },
+    { ...createCustomColors(_lastMergedConfig.theme.color.custom) },
   ) as unknown as MaterialDesignTheme;
 
-  return _mdt;
+  return { theme: _mdt, mergedConfig: _lastMergedConfig };
 }
