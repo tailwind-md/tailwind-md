@@ -11,7 +11,7 @@ module.exports = {
       theme: {
         color: {
           themeModeSwitchMethod: "data-attribute",
-          seed: "#0070C9",
+          seed: "#9F2B68",
         },
       },
     }),

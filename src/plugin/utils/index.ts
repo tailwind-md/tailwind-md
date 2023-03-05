@@ -55,8 +55,6 @@ export function toCSSVariables(
   opts = { ...defaultTransformerOptions, ...opts };
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    console.log("input: ", key);
-    console.log("output", camelToKebabCase(opts.createKey(key, value)));
     const k = `--${pf(opts.prefix)}${camelToKebabCase(
       opts.createKey(key, value),
     )}`;

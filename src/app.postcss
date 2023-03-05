@@ -1,9 +1,13 @@
 @layer app-base {
   @tailwind base;
 
+  * {
+    @apply transition-colors;
+  }
+
   html,
   body {
-    @apply h-screen bg-background;
+    @apply min-h-screen bg-background;
   }
 }
 
