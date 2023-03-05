@@ -499,6 +499,37 @@ export function surfaceTintOpacity(elevationLevel: ElevationDistance): number {
   );
 }
 
+export function elevationDistanceToBackgroundImage(
+  elevationLevel: ElevationDistance,
+): string {
+  const op = surfaceTintOpacity(elevationLevel);
+
+  const surfaceTint = `rgb(var(--md-sys-color-surface-tint) / ${op}%)`;
+  const surface = `rgb(var(--md-sys-color-surface) / 100%)`;
+
+  return `linear-gradient(0deg, ${surfaceTint} 0%, ${surfaceTint} 100%), linear-gradient(0deg, ${surface} 100%, ${surface} 100%)`;
+}
+
+export function toTailwindBackgroundImageTheme(
+  elevation: Elevation,
+  opts?: ThemeTransformerOptions,
+): Record<string, string> {
+  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const t: Record<string, string> = {};
+
+  const p = pf(opts.prefix);
+  for (const [k, v] of Object.entries(elevation)) {
+    const key = `${camelToKebabCase(opts.createKey(k, v))}`;
+    const value = `var(--${p}${camelToKebabCase(
+      opts.createValue(k, v),
+    )}-surface)`;
+
+    t[key] = value;
+  }
+
+  return t;
+}
+
 export type BoxShadow = {
   xOffset: `${number}px`;
   yOffset: `${number}px`;

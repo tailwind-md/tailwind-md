@@ -3,16 +3,16 @@ import type { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
 import { materialDesignTheme, type MaterialDesignConfig } from "./theme";
 export type { MaterialDesignConfig } from "./theme";
 import {
+  elevationDistanceToBackgroundImage,
   flattenProperties,
   shadowPenumbra,
   shadowUmbra,
-  surfaceTintOpacity,
   toCSSVariables,
+  toTailwindBackgroundImageTheme,
   toTailwindBoxShadowTheme,
   toTailwindColorTheme,
   toTailwindFontSizeTheme,
   toTailwindTheme,
-  type BoxShadow,
 } from "./utils";
 
 type RTKVP = ResolvableTo<KeyValuePair<string, string>>;
@@ -33,9 +33,9 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       const elevations: Record<
         string,
         {
-          surfaceTintOpacity: string;
           shadowUmbra: string;
           shadowPenumbra: string;
+          surface: string;
         }
       > = {};
 
@@ -44,7 +44,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         const penumbra = shadowPenumbra(value);
 
         elevations[key] = {
-          surfaceTintOpacity: `${surfaceTintOpacity(value)}%`,
+          surface: elevationDistanceToBackgroundImage(value),
           shadowUmbra: `${umbra.xOffset} ${umbra.yOffset} ${umbra.blurRadius} ${umbra.spreadRadius}`,
           shadowPenumbra: `${penumbra.xOffset} ${penumbra.yOffset} ${penumbra.blurRadius} ${penumbra.spreadRadius}`,
         };
@@ -120,6 +120,11 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       prefix: "md-sys-color",
     });
 
+    const backgroundImage = toTailwindBackgroundImageTheme(md.sys.elevation, {
+      prefix: "md-sys-elevation",
+      createKey: (k) => `surface-elevation-${k}`,
+    });
+
     let opacity = toTailwindTheme(flattenProperties(md.sys.state), {
       prefix: "md-sys-state",
       createKey: (k) => k.replace("Opacity", ""),
@@ -154,6 +159,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           colors,
           borderRadius,
           boxShadow,
+          backgroundImage,
           opacity,
           fontSize,
         },
