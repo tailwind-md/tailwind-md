@@ -1,10 +1,13 @@
-const material3 = require("./dist/index.cjs");
+const materialDesign = require("./dist/index.cjs");
+
+/** @type {import("./dist/index.cjs")} */
+const opts = {};
 
 module.exports = {
   content: ["./src/**/*.svelte"],
   theme: {},
   plugins: [
-    material3({
+    materialDesign({
       theme: {
         color: {
           themeModeSwitchMethod: "data-attribute",

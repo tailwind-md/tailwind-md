@@ -12,6 +12,7 @@ import {
   toTailwindColorTheme,
   toTailwindFontSizeTheme,
   toTailwindTheme,
+  type BoxShadow,
 } from "./utils";
 
 type RTKVP = ResolvableTo<KeyValuePair<string, string>>;
@@ -41,6 +42,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       for (const [key, value] of Object.entries(els)) {
         const umbra = shadowUmbra(value);
         const penumbra = shadowPenumbra(value);
+
         elevations[key] = {
           surfaceTintOpacity: `${surfaceTintOpacity(value)}%`,
           shadowUmbra: `${umbra.xOffset} ${umbra.yOffset} ${umbra.blurRadius} ${umbra.spreadRadius}`,

@@ -30,18 +30,18 @@ type ThemeTransformerOptions = TransormerOptions & {
 
 const defaultTransformerOptions: Required<TransormerOptions> = {
   prefix: "",
+  // no-op
   createKey: (k) => k,
 };
 
 const defaultThemeTransformerOptions: Required<ThemeTransformerOptions> = {
   ...defaultTransformerOptions,
+  // no-op
   createValue: (k) => k,
 };
 
-export function camelToKebabCase(snake: string): string {
-  return /^([A-Z])/.test(snake)
-    ? snake
-    : snake.replace(/([a-z]+|(?:[a-z]+[0-9]+))([A-Z])/g, "$1-$2").toLowerCase();
+export function camelToKebabCase(camel: string): string {
+  return camel.replace(/(?<=[a-z0-9A-Z])([A-Z])/g, "-$1").toLowerCase();
 }
 
 function pf(p: string) {
@@ -55,9 +55,13 @@ export function toCSSVariables(
   opts = { ...defaultTransformerOptions, ...opts };
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    vars[
-      `--${pf(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`
-    ] = `${value}`;
+    console.log("input: ", key);
+    console.log("output", camelToKebabCase(opts.createKey(key, value)));
+    const k = `--${pf(opts.prefix)}${camelToKebabCase(
+      opts.createKey(key, value),
+    )}`;
+
+    vars[k] = `${value}`;
   }
   return vars;
 }
@@ -200,10 +204,12 @@ export function toTailwindTheme<V>(
 
   return x;
 }
+
 type FontSizeTheme = Record<
   string,
   [string, { lineHeight: string; letterSpacing: string; fontWeight: string }]
 >;
+
 export function toTailwindFontSizeTheme(
   x: Record<string, FontStyle>,
   opts?: ThemeTransformerOptions,
@@ -372,6 +378,7 @@ function deepMergeImpl<T extends Record<string, unknown>>(
 
   return merged;
 }
+
 export function deepMerge<T extends Record<string, unknown>>(
   o1: T,
   ...rest: DeepPartial<T>[]
@@ -494,7 +501,7 @@ export function surfaceTintOpacity(elevationLevel: ElevationDistance): number {
   );
 }
 
-type BoxShadow = {
+export type BoxShadow = {
   xOffset: `${number}px`;
   yOffset: `${number}px`;
   blurRadius: `${number}px`;
@@ -546,6 +553,7 @@ export function shadowPenumbra(distance: ElevationDistance): BoxShadow {
     )}px`,
   };
 }
+
 export function toTailwindBoxShadowTheme(
   elevation: Elevation,
   opts?: ThemeTransformerOptions,
@@ -558,7 +566,7 @@ export function toTailwindBoxShadowTheme(
     const cssVar = camelToKebabCase(opts.createValue(k, v));
     t[
       camelToKebabCase(opts.createKey(k, v))
-    ] = `var(--${p}${cssVar}-shadow-umbra) rgb(var(--md-sys-color-black) / 30%), var(--${p}${cssVar}-shadow-penumbra) rgb(var(--md-sys-color-black) / 15%)`;
+    ] = `var(--${p}${cssVar}-shadow-umbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), var(--${p}${cssVar}-shadow-penumbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 15%))`;
   }
 
   return t;
