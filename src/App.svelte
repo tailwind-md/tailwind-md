@@ -1,6 +1,8 @@
 <script lang="ts">
   import Color from "$components/Color.svelte";
   import Elevation from "$components/Elevation.svelte";
+  import Shape from "$components/Shape.svelte";
+  import Typography from "$components/Typography.svelte";
   import "./app.postcss";
 
   let dark = false;
@@ -21,4 +23,6 @@
 <div class="flex flex-col gap-12 p-8">
   <Color />
   <Elevation />
+  <Shape />
+  <Typography />
 </div>

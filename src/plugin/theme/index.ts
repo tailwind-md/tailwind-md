@@ -10,7 +10,7 @@ import type {
 import {
   createReferencePalette,
   createColorScheme,
-  deepEqual,
+  // deepEqual,
   deepMerge,
   objectHexToRGBSpaceSeparated,
   createCustomReferencePalatte,
@@ -276,13 +276,16 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
   theme: MaterialDesignTheme;
   mergedConfig: MergedConfig;
 } {
-  if (_mdt && deepEqual(_lastOpts, opts ?? {})) {
-    return { theme: _mdt, mergedConfig: _lastMergedConfig };
-  }
+  // TODO: This is not working as expected. Need to figure out why.
+  // Some properties are becoming null after the first time this is called.
+  //
+  // if (_mdt && deepEqual(_lastOpts, opts)) {
+  //   return { theme: _mdt, mergedConfig: _lastMergedConfig };
+  // }
 
   _lastOpts = opts;
 
-  _lastMergedConfig = deepMerge(materialDefaultOptions, opts ?? {});
+  _lastMergedConfig = deepMerge(materialDefaultOptions, opts);
 
   _mdt = deepMerge(
     {

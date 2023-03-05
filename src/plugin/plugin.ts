@@ -26,7 +26,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       const color = { ...md.sys.color };
       delete md.sys.color;
 
-      const els = md.sys.elevation;
+      const els = { ...md.sys.elevation };
 
       delete md.sys.elevation;
 
@@ -125,7 +125,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       createKey: (k) => `surface-elevation-${k}`,
     });
 
-    let opacity = toTailwindTheme(flattenProperties(md.sys.state), {
+    const opacity = toTailwindTheme(flattenProperties(md.sys.state), {
       prefix: "md-sys-state",
       createKey: (k) => k.replace("Opacity", ""),
     }) as unknown as RTKVP;
