@@ -18,40 +18,39 @@ import {
   type DeepPartial,
 } from "$plugin/utils";
 
-export type MaterialDesignConfig = DeepPartial<{
-  theme: {
-    color: {
-      seed: string;
-      seedReferencePalette: Record<BaseColor, string>;
-      custom: Record<string, string>;
-      scheme: { light: SystemColorScheme; dark: SystemColorScheme };
-      defaultThemeMode: "light" | "dark";
-      generateThemeModes: ("light" | "dark")[];
-      themeModeSwitchMethod: "class" | "data-attribute";
+export type MaterialDesignConfig<CustomColors extends string = string> =
+  DeepPartial<{
+    themeMode: string | string[];
+    defaultThemeMode: "dark" | "light";
+    theme: {
+      color: {
+        seed: string;
+        seedReferencePalette: Record<BaseColor, string>;
+        custom: Record<CustomColors, string>;
+        scheme: { light: SystemColorScheme; dark: SystemColorScheme };
+      };
+
+      elevation: Elevation;
+
+      state: States;
+
+      shape: Shape;
+
+      typescale: Typescale;
     };
 
-    elevation: Elevation;
-
-    state: States;
-
-    shape: Shape;
-
-    typescale: Typescale;
-  };
-
-  emitReferenceClasses?: boolean;
-}>;
+    emitReferenceClasses?: boolean;
+  }>;
 
 export const materialDefaultOptions = {
+  themeMode: ".<theme-mode>" as string | string[],
+  defaultThemeMode: "light" as string,
   theme: {
     color: {
       seed: "#6750a4",
       scheme: { light: {}, dark: {} },
       seedReferencePalette: {},
       custom: {},
-      defaultThemeMode: "light",
-      generateThemeModes: ["dark", "light"],
-      themeModeSwitchMethod: "class",
     } satisfies Required<MaterialDesignConfig["theme"]["color"]>,
     state: {
       hovered: {

@@ -63,6 +63,8 @@ export type SystemExtraColors = {
 
 export type ReferencePalette = Record<BaseColor, TonalPalette>;
 
-export type SystemColorScheme = SystemKeyColors &
-  SystemNeutralColors &
-  SystemExtraColors;
+export type SystemColorScheme<CustomColors extends string = string> =
+  SystemKeyColors &
+    SystemNeutralColors &
+    SystemExtraColors &
+    SystemKeyColor<CustomColors>;

@@ -55,7 +55,7 @@ const vars = {
 
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
-    return ({ addBase, matchUtilities, theme, addUtilities }) => {
+    return ({ addBase, matchUtilities, theme, addUtilities, config }) => {
       // add base
       const { theme: md, mergedConfig: conf } = materialDesignTheme(opts);
 
@@ -271,41 +271,57 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           flattenProperties({
             md: {
               sys: {
-                color: color[conf.theme.color.defaultThemeMode],
+                color: color[conf.defaultThemeMode],
               },
             },
           }),
         ),
       });
 
-      const themeModes = new Set(conf.theme.color.generateThemeModes);
+      const themeMode = conf.themeMode;
 
-      for (const themeMode of themeModes) {
-        if (!["light", "dark"].includes(themeMode)) {
-          throw new Error(
-            `Invalid theme mode "${themeMode}" in generateThemeModes. Only "light" and "dark" are supported.`,
-          );
-        }
-
-        if (conf.theme.color.themeModeSwitchMethod === "class") {
+      if (typeof themeMode === "string") {
+        addBase({
+          [themeMode.replace("<theme-mode>", "dark")]: toCSSVariables(
+            flattenProperties({
+              md: {
+                sys: {
+                  color: color.dark,
+                },
+              },
+            }),
+          ),
+        });
+        addBase({
+          [themeMode.replace("<theme-mode>", "light")]: toCSSVariables(
+            flattenProperties({
+              md: {
+                sys: {
+                  color: color.light,
+                },
+              },
+            }),
+          ),
+        });
+      } else {
+        for (const mode of themeMode) {
           addBase({
-            [`.${themeMode}`]: toCSSVariables(
+            [mode.replace("<theme-mode>", "dark")]: toCSSVariables(
               flattenProperties({
                 md: {
                   sys: {
-                    color: color[themeMode],
+                    color: color.dark,
                   },
                 },
               }),
             ),
           });
-        } else {
           addBase({
-            [`[data-theme-mode="${themeMode}"]`]: toCSSVariables(
+            [mode.replace("<theme-mode>", "light")]: toCSSVariables(
               flattenProperties({
                 md: {
                   sys: {
-                    color: color[themeMode],
+                    color: color.light,
                   },
                 },
               }),
