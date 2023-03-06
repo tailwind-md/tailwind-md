@@ -61,6 +61,42 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         };
       }
 
+      addUtilities({
+        ".material": {
+          "--md-var-ripple-color": "transparent",
+          "--md-var-ripple-image":
+            "linear-gradient(0deg, transparent 0%, transparent 0%)",
+          "--md-var-ripple-opacity": "1",
+          "--md-var-state-layer-color": "transparent",
+          "--md-var-state-layer-image":
+            "linear-gradient(0deg, transparent 0%, transparent 0%)",
+          "--md-var-state-layer-opacity": "1",
+          "--md-var-surface-overlay-color": "transparent",
+          "--md-var-surface-overlay-image":
+            "linear-gradient(0deg, transparent 0%, transparent 0%)",
+          "--md-var-container-color": "transparent",
+          "--md-var-container-image":
+            "linear-gradient(0deg, transparent 0%, transparent 0%)",
+          backgroundImage: `
+            /* Ripple Layer */
+            var(--md-var-ripple-image),
+            linear-gradient(0deg, var(--md-var-ripple-color) 0%, var(--md-var-ripple-color) 100%),
+
+            /* State Layer */
+            var(--md-var-state-layer-image),
+            linear-gradient(0deg, var(--md-var-state-layer-color) 0%, var(--md-var-state-layer-color) 100%),
+
+            /* Surface Overlay */
+            var(--md-var-surface-overlay-image),
+            linear-gradient(0deg, var(--md-var-surface-overlay-color) 0%, var(--md-var-surface-overlay-color) 100%),
+
+            /* Container */
+            var(--md-var-container-image),
+            linear-gradient(0deg, var(--md-var-container-color) 0%, var(--md-var-container-color) 100%)
+            `,
+        },
+      });
+
       matchUtilities(
         {
           ripple: (value) => {
@@ -104,6 +140,35 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
       matchUtilities(
         {
+          ripple: (value) => {
+            return {
+              "--md-var-ripple-image": value,
+            };
+          },
+          "state-layer": (value) => {
+            return {
+              "--md-var-state-layer-image": value,
+            };
+          },
+          "surface-overlay": (value) => {
+            return {
+              "--md-var-surface-overlay-image": value,
+            };
+          },
+          container: (value) => {
+            return {
+              "--md-var-container-image": value,
+            };
+          },
+        },
+        {
+          values: theme("backgroundImage"),
+          type: ["image"],
+        },
+      );
+
+      matchUtilities(
+        {
           "ripple-opacity": (value) => {
             return {
               "--md-var-ripple-opacity": value,
@@ -127,20 +192,9 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         },
         {
           values: theme("opacity"),
-          type: ["percentage", "any"],
+          type: ["percentage"],
         },
       );
-
-      addUtilities({
-        ".material": {
-          backgroundImage: `
-            linear-gradient(0deg, var(--md-var-ripple-color, transparent) 0%, var(--md-var-ripple-color, transparent) 100%),
-            linear-gradient(0deg, var(--md-var-state-layer-color, transparent) 0%, var(--md-var-state-layer-color, transparent) 100%),
-            linear-gradient(0deg, var(--md-var-surface-overlay-color, transparent) 0%, var(--md-var-surface-overlay-color, transparent) 100%),
-            linear-gradient(0deg, var(--md-var-container-color, transparent) 0%, var(--md-var-container-color, transparent) 100%)
-            `,
-        },
-      });
 
       addBase({
         ":root": toCSSVariables(

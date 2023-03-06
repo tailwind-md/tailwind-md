@@ -3,32 +3,32 @@
   <h3 class="text-on-surface text-headline-small">Surface Tone</h3>
   <div class="flex flex-row gap-4">
     <div
-      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material surface-overlay-surface-tint/level0-surface-tint text-on-surface"
+      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material container-surface text-on-surface surface-overlay-surface-tint/level0-surface-tint"
     >
       Level 0
     </div>
     <div
-      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material surface-overlay-surface-tint/level1-surface-tint text-on-surface"
+      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material container-surface text-on-surface surface-overlay-surface-tint/level1-surface-tint"
     >
       Level 1
     </div>
     <div
-      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material surface-overlay-surface-tint/level2-surface-tint text-on-surface"
+      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material container-surface text-on-surface surface-overlay-surface-tint/level2-surface-tint"
     >
       Level 2
     </div>
     <div
-      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material surface-overlay-surface-tint/level3-surface-tint text-on-surface"
+      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material container-surface text-on-surface surface-overlay-surface-tint/level3-surface-tint"
     >
       Level 3
     </div>
     <div
-      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material surface-overlay-surface-tint/level4-surface-tint text-on-surface"
+      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material container-surface text-on-surface surface-overlay-surface-tint/level4-surface-tint"
     >
       Level 4
     </div>
     <div
-      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material surface-overlay-surface-tint/level5-surface-tint text-on-surface"
+      class="h-36 w-36 rounded-full flex flex-col items-center justify-center material container-surface text-on-surface surface-overlay-surface-tint/level5-surface-tint"
     >
       Level 5
     </div>

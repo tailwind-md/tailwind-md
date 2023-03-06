@@ -10,19 +10,21 @@
   $: document.body.dataset.themeMode = dark ? "dark" : "light";
 </script>
 
-<header
-  class="w-full sticky top-0 text-on-surface p-8 py-6 items-center flex flex-row gap-4 material container-surface surface-overlay-surface-tint/level2-surface-tint"
->
-  <h1 class="text-headline-large text-on-background">Material Design 3</h1>
-  <button
-    class="bg-primary text-on-primary text-label-large h-[40px] px-6 rounded-full"
-    on:click={() => (dark = !dark)}>Toggle dark mode</button
+<div class="material container-background">
+  <header
+    class="w-full sticky top-0 text-on-surface p-8 py-6 items-center flex flex-row gap-4 material container-surface surface-overlay-surface-tint/level2-surface-tint"
   >
-</header>
+    <h1 class="text-headline-large text-on-background">Material Design 3</h1>
+    <button
+      class="bg-primary text-on-primary text-label-large h-[40px] px-6 rounded-full"
+      on:click={() => (dark = !dark)}>Toggle dark mode</button
+    >
+  </header>
 
-<div class="flex flex-col gap-12 p-8 state-slate-50">
-  <Color />
-  <Elevation />
-  <Shape />
-  <Typography />
+  <div class="flex flex-col gap-12 p-8">
+    <Color />
+    <Elevation />
+    <Shape />
+    <Typography />
+  </div>
 </div>
