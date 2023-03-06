@@ -3,15 +3,14 @@ import type { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
 import { materialDesignTheme, type MaterialDesignConfig } from "./theme";
 export type { MaterialDesignConfig } from "./theme";
 import {
-  elevationDistanceToBackgroundImage,
   flattenColors,
   flattenProperties,
   hexToRGBSpaceSeparated,
   isHexColor,
   shadowPenumbra,
   shadowUmbra,
+  surfaceTintOpacity,
   toCSSVariables,
-  toTailwindBackgroundImageTheme,
   toTailwindBoxShadowTheme,
   toTailwindColorTheme,
   toTailwindFontSizeTheme,
@@ -44,18 +43,19 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       const elevations: Record<
         string,
         {
+          surfaceTintOpacity: string;
           shadowUmbra: string;
           shadowPenumbra: string;
-          surface: string;
         }
       > = {};
 
       for (const [key, value] of Object.entries(els)) {
         const umbra = shadowUmbra(value);
         const penumbra = shadowPenumbra(value);
+        const opacity = `${surfaceTintOpacity(value)}%`;
 
         elevations[key] = {
-          surface: elevationDistanceToBackgroundImage(value),
+          surfaceTintOpacity: opacity,
           shadowUmbra: `${umbra.xOffset} ${umbra.yOffset} ${umbra.blurRadius} ${umbra.spreadRadius}`,
           shadowPenumbra: `${penumbra.xOffset} ${penumbra.yOffset} ${penumbra.blurRadius} ${penumbra.spreadRadius}`,
         };
@@ -219,15 +219,17 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       prefix: "md-sys-color",
     });
 
-    const backgroundImage = toTailwindBackgroundImageTheme(md.sys.elevation, {
-      prefix: "md-sys-elevation",
-      createKey: (k) => `surface-elevation-${k}`,
-    });
-
-    const opacity = toTailwindTheme(flattenProperties(md.sys.state), {
-      prefix: "md-sys-state",
-      createKey: (k) => k.replace("Opacity", ""),
-    }) as unknown as RTKVP;
+    const opacity = {
+      ...toTailwindTheme(flattenProperties(md.sys.state), {
+        prefix: "md-sys-state",
+        createKey: (k) => k.replace("Opacity", ""),
+      }),
+      ...toTailwindTheme(flattenProperties(md.sys.elevation), {
+        prefix: "md-sys-elevation",
+        createKey: (k) => `${k}-surface-tint`,
+        createValue: (k) => `${k}-surface-tint-opacity`,
+      }),
+    } as unknown as RTKVP;
 
     const borderRadius = toTailwindTheme(md.sys.shape.corner, {
       prefix: "md-sys-shape-corner",
@@ -239,7 +241,6 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
     const boxShadow = toTailwindBoxShadowTheme(md.sys.elevation, {
       prefix: "md-sys-elevation",
-      createKey: (k) => `elevation-${k}`,
     });
 
     if (opts?.emitReferenceClasses) {
@@ -258,7 +259,6 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           colors,
           borderRadius,
           boxShadow,
-          backgroundImage,
           opacity,
           fontSize,
         },
