@@ -11,7 +11,7 @@
 </script>
 
 <header
-  class="w-full sticky top-0 bg-surface text-on-surface p-8 py-6 items-center flex flex-row gap-4 bg-surface-elevation-level2"
+  class="w-full sticky top-0 text-on-surface p-8 py-6 items-center flex flex-row gap-4 material container-surface surface-overlay-surface-tint/10"
 >
   <h1 class="text-headline-large text-on-background">Material Design 3</h1>
   <button

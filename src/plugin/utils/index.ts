@@ -513,7 +513,7 @@ export function elevationDistanceToBackgroundImage(
   const surfaceTint = `rgb(var(--md-sys-color-surface-tint) / ${op}%)`;
   const surface = `rgb(var(--md-sys-color-surface) / 100%)`;
 
-  return `linear-gradient(0deg, ${surfaceTint} 0%, ${surfaceTint} 100%), linear-gradient(0deg, ${surface} 100%, ${surface} 100%)`;
+  return `linear-gradient(0deg, ${surfaceTint} 0%, ${surfaceTint} 100%), linear-gradient(0deg, ${surface} 0%, ${surface} 100%)`;
 }
 
 export function toTailwindBackgroundImageTheme(

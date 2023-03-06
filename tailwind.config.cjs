@@ -13,6 +13,7 @@ module.exports = {
         color: {
           themeModeSwitchMethod: "data-attribute",
           seed: "#088F8F",
+          defaultThemeMode: "light",
         },
       },
     }),

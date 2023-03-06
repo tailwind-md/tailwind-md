@@ -65,33 +65,33 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         {
           ripple: (value) => {
             return {
-              "--md-ripple-color": _toRgbWithOpacity(
+              "--md-var-ripple-color": _toRgbWithOpacity(
                 value,
-                "var(--md-ripple-opacity, 1)",
+                "var(--md-var-ripple-opacity, 1)",
               ),
             };
           },
           "state-layer": (value) => {
             return {
-              "--md-state-layer-color": _toRgbWithOpacity(
+              "--md-var-state-layer-color": _toRgbWithOpacity(
                 value,
-                "var(--md-state-layer-opacity, 1)",
+                "var(--md-var-state-layer-opacity, 1)",
               ),
             };
           },
           "surface-overlay": (value) => {
             return {
-              "--md-surface-overlay-color": _toRgbWithOpacity(
+              "--md-var-surface-overlay-color": _toRgbWithOpacity(
                 value,
-                "var(--md-surface-overlay-opacity, 1)",
+                "var(--md-var-surface-overlay-opacity, 1)",
               ),
             };
           },
           container: (value) => {
             return {
-              "--md-container-color": _toRgbWithOpacity(
+              "--md-var-container-color": _toRgbWithOpacity(
                 value,
-                "var(--md-container-opacity, 1)",
+                "var(--md-var-container-opacity, 1)",
               ),
             };
           },
@@ -106,22 +106,22 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         {
           "ripple-opacity": (value) => {
             return {
-              "--md-ripple-opacity": value,
+              "--md-var-ripple-opacity": value,
             };
           },
           "state-layer-opacity": (value) => {
             return {
-              "--md-state-layer-opacity": value,
+              "--md-var-state-layer-opacity": value,
             };
           },
           "surface-overlay-opacity": (value) => {
             return {
-              "--md-surface-overlay-opacity": value,
+              "--md-var-surface-overlay-opacity": value,
             };
           },
           "container-opacity": (value) => {
             return {
-              "--md-container-opacity": value,
+              "--md-var-container-opacity": value,
             };
           },
         },
@@ -134,16 +134,16 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       addUtilities({
         ".material": {
           backgroundImage: `
-            linear-gradient(0deg, var(--md-ripple-color, transparent) 0%, var(--md-ripple-color, transparent) 100%),
-            linear-gradient(0deg, var(--md-state-layer-color, transparent) 0%, var(--md-state-layer-color, transparent) 100%),
-            linear-gradient(0deg, var(--md-surface-overlay-color, transparent) 0%, var(--md-surface-overlay-color, transparent) 100%),
-            linear-gradient(0deg, var(--md-container-color, transparent) 0%, var(--md-container-color, transparent) 100%)
+            linear-gradient(0deg, var(--md-var-ripple-color, transparent) 0%, var(--md-var-ripple-color, transparent) 100%),
+            linear-gradient(0deg, var(--md-var-state-layer-color, transparent) 0%, var(--md-var-state-layer-color, transparent) 100%),
+            linear-gradient(0deg, var(--md-var-surface-overlay-color, transparent) 0%, var(--md-var-surface-overlay-color, transparent) 100%),
+            linear-gradient(0deg, var(--md-var-container-color, transparent) 0%, var(--md-var-container-color, transparent) 100%)
             `,
         },
       });
 
       addBase({
-        "*": toCSSVariables(
+        ":root": toCSSVariables(
           flattenProperties({
             md,
           }),
@@ -151,7 +151,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       });
 
       addBase({
-        "*": toCSSVariables(
+        ":root": toCSSVariables(
           flattenProperties({
             md: {
               sys: {
@@ -174,9 +174,15 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         ),
       });
 
-      const themeModes = conf.theme.color.generateThemeModes;
+      const themeModes = new Set(conf.theme.color.generateThemeModes);
 
       for (const themeMode of themeModes) {
+        if (!["light", "dark"].includes(themeMode)) {
+          throw new Error(
+            `Invalid theme mode "${themeMode}" in generateThemeModes. Only "light" and "dark" are supported.`,
+          );
+        }
+
         if (conf.theme.color.themeModeSwitchMethod === "class") {
           addBase({
             [`.${themeMode}`]: toCSSVariables(
@@ -205,6 +211,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       }
     };
   },
+
   (opts) => {
     const { theme: md } = materialDesignTheme(opts);
 

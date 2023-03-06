@@ -50,7 +50,7 @@ export const materialDefaultOptions = {
       seedReferencePalette: {},
       custom: {},
       defaultThemeMode: "light",
-      generateThemeModes: ["light", "dark"],
+      generateThemeModes: ["dark", "light"],
       themeModeSwitchMethod: "class",
     } satisfies Required<MaterialDesignConfig["theme"]["color"]>,
     state: {
@@ -96,36 +96,6 @@ export const materialDefaultOptions = {
       },
     },
     elevation: {
-      // level0: {
-      //   surfaceTintOpacity: "0%",
-      //   umbra: "0px 0px 0px 0px rgb(var(--md-sys-color-black) / 30%)",
-      //   penumbra: "0px 0px 0px 0px rgb(var(--md-sys-color-black) / 15%)",
-      // },
-      // level1: {
-      //   surfaceTintOpacity: "5%",
-      //   umbra: "0px 1px 2px 0px rgb(var(--md-sys-color-black) / 30%)",
-      //   penumbra: "0px 1px 3px 1px rgb(var(--md-sys-color-black) / 15%)",
-      // },
-      // level2: {
-      //   surfaceTintOpacity: "8%",
-      //   umbra: "0px 1px 2px 0px rgb(var(--md-sys-color-black) / 30%)",
-      //   penumbra: "0px 2px 6px 2px rgb(var(--md-sys-color-black) / 15%)",
-      // },
-      // level3: {
-      //   surfaceTintOpacity: "11%",
-      //   umbra: "0px 1px 3px 0px rgb(var(--md-sys-color-black) / 30%)",
-      //   penumbra: "0px 4px 8px 3px rgb(var(--md-sys-color-black) / 15%)",
-      // },
-      // level4: {
-      //   surfaceTintOpacity: "12%",
-      //   umbra: "0px 2px 3px 0px rgb(var(--md-sys-color-black) / 30%)",
-      //   penumbra: "0px 6px 10px 4px rgb(var(--md-sys-color-black) / 15%)",
-      // },
-      // level5: {
-      //   surfaceTintOpacity: "14%",
-      //   umbra: "0px 4px 4px 0px rgb(var(--md-sys-color-black) / 30%)",
-      //   penumbra: "0px 8px 12px 6px rgb(var(--md-sys-color-black) / 15%)",
-      // },
       level0: "0px",
       level1: "1px",
       level2: "3px",
