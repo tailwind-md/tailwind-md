@@ -44,7 +44,7 @@ export type MaterialDesignConfig<CustomColors extends string = string> =
 
 export const materialDefaultOptions = {
   themeMode: ".<theme-mode>" as string | string[],
-  defaultThemeMode: "light" as string,
+  defaultThemeMode: "light",
   theme: {
     color: {
       seed: "#6750a4",
