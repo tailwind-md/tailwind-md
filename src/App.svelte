@@ -20,7 +20,7 @@
   >
 </header>
 
-<div class="flex flex-col gap-12 p-8">
+<div class="flex flex-col gap-12 p-8 state-slate-50">
   <Color />
   <Elevation />
   <Shape />

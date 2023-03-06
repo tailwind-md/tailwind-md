@@ -391,9 +391,15 @@ export function deepMerge<T extends Record<string, unknown>>(
 }
 
 export function hexToRGB(h: string): [number, number, number] {
-  const r = parseInt(h[1] + h[2], 16);
-  const g = parseInt(h[3] + h[4], 16);
-  const b = parseInt(h[5] + h[6], 16);
+  if (!isHexColor(h)) {
+    throw new Error(`Invalid hex color: ${h}`);
+  }
+
+  const singleDigit = h.length === 4;
+
+  const r = singleDigit ? parseInt(h[1]) : parseInt(h[1] + h[2], 16);
+  const g = singleDigit ? parseInt(h[2]) : parseInt(h[3] + h[4], 16);
+  const b = singleDigit ? parseInt(h[3]) : parseInt(h[5] + h[6], 16);
 
   return [r, g, b];
 }
@@ -593,10 +599,39 @@ export function toTailwindBoxShadowTheme(
   for (const [k, v] of Object.entries(elevation)) {
     const p = pf(opts.prefix);
     const cssVar = camelToKebabCase(opts.createValue(k, v));
-    t[
-      camelToKebabCase(opts.createKey(k, v))
-    ] = `var(--${p}${cssVar}-shadow-umbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), var(--${p}${cssVar}-shadow-penumbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 15%))`;
+    t[camelToKebabCase(opts.createKey(k, v))] = `
+    var(--${p}${cssVar}-shadow-umbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), 
+    var(--${p}${cssVar}-shadow-penumbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 15%))
+    `;
   }
 
   return t;
+}
+
+type Color =
+  | string
+  | {
+      [key: "DEFAULT" | string]: string;
+    };
+
+type Colors = Record<string, Color>;
+
+export function flattenColors(colors: Colors): Record<string, string> {
+  const c: Record<string, string> = {};
+
+  for (const [k, v] of Object.entries(colors)) {
+    if (typeof v === "string") {
+      c[k] = v;
+    } else {
+      for (const [k2, v2] of Object.entries(v)) {
+        c[`${k}-${k2}`] = v2;
+      }
+    }
+  }
+
+  return c;
+}
+
+export function isHexColor(color: string): boolean {
+  return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
 }

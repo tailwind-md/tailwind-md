@@ -4,7 +4,10 @@ import { materialDesignTheme, type MaterialDesignConfig } from "./theme";
 export type { MaterialDesignConfig } from "./theme";
 import {
   elevationDistanceToBackgroundImage,
+  flattenColors,
   flattenProperties,
+  hexToRGBSpaceSeparated,
+  isHexColor,
   shadowPenumbra,
   shadowUmbra,
   toCSSVariables,
@@ -17,9 +20,17 @@ import {
 
 type RTKVP = ResolvableTo<KeyValuePair<string, string>>;
 
+function _toRgbWithOpacity(value: string, opacity: string): string {
+  return typeof value === "function"
+    ? (value as (o: number) => string)(1).replace("/ 1", `/ ${opacity}`)
+    : isHexColor(value)
+    ? `rgb(${hexToRGBSpaceSeparated(value)} / ${opacity})`
+    : value;
+}
+
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
-    return ({ addBase }) => {
+    return ({ addBase, matchUtilities, theme, addUtilities }) => {
       // add base
       const { theme: md, mergedConfig: conf } = materialDesignTheme(opts);
 
@@ -49,6 +60,87 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           shadowPenumbra: `${penumbra.xOffset} ${penumbra.yOffset} ${penumbra.blurRadius} ${penumbra.spreadRadius}`,
         };
       }
+
+      matchUtilities(
+        {
+          ripple: (value) => {
+            return {
+              "--md-ripple-color": _toRgbWithOpacity(
+                value,
+                "var(--md-ripple-opacity, 1)",
+              ),
+            };
+          },
+          "state-layer": (value) => {
+            return {
+              "--md-state-layer-color": _toRgbWithOpacity(
+                value,
+                "var(--md-state-layer-opacity, 1)",
+              ),
+            };
+          },
+          "surface-overlay": (value) => {
+            return {
+              "--md-surface-overlay-color": _toRgbWithOpacity(
+                value,
+                "var(--md-surface-overlay-opacity, 1)",
+              ),
+            };
+          },
+          container: (value) => {
+            return {
+              "--md-container-color": _toRgbWithOpacity(
+                value,
+                "var(--md-container-opacity, 1)",
+              ),
+            };
+          },
+        },
+        {
+          values: flattenColors(theme("colors")),
+          type: ["color"],
+        },
+      );
+
+      matchUtilities(
+        {
+          "ripple-opacity": (value) => {
+            return {
+              "--md-ripple-opacity": value,
+            };
+          },
+          "state-layer-opacity": (value) => {
+            return {
+              "--md-state-layer-opacity": value,
+            };
+          },
+          "surface-overlay-opacity": (value) => {
+            return {
+              "--md-surface-overlay-opacity": value,
+            };
+          },
+          "container-opacity": (value) => {
+            return {
+              "--md-container-opacity": value,
+            };
+          },
+        },
+        {
+          values: theme("opacity"),
+          type: ["percentage", "any"],
+        },
+      );
+
+      addUtilities({
+        ".material": {
+          backgroundImage: `
+            linear-gradient(0deg, var(--md-ripple-color, transparent) 0%, var(--md-ripple-color, transparent) 100%),
+            linear-gradient(0deg, var(--md-state-layer-color, transparent) 0%, var(--md-state-layer-color, transparent) 100%),
+            linear-gradient(0deg, var(--md-surface-overlay-color, transparent) 0%, var(--md-surface-overlay-color, transparent) 100%),
+            linear-gradient(0deg, var(--md-container-color, transparent) 0%, var(--md-container-color, transparent) 100%)
+            `,
+        },
+      });
 
       addBase({
         "*": toCSSVariables(
