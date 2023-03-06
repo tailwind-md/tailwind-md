@@ -27,6 +27,31 @@ function _toRgbWithOpacity(value: string, opacity: string): string {
     : value;
 }
 
+const vars = {
+  rippleColor: "--md-var-ripple-color",
+  rippleImage: "--md-var-ripple-image",
+  rippleOpacity: "--md-var-ripple-opacity",
+  stateLayerColor: "--md-var-state-layer-color",
+  stateLayerImage: "--md-var-state-layer-image",
+  stateLayerOpacity: "--md-var-state-layer-opacity",
+  surfaceOverlayColor: "--md-var-surface-overlay-color",
+  surfaceOverlayImage: "--md-var-surface-overlay-image",
+  surfaceOverlayOpacity: "--md-var-surface-overlay-opacity",
+  containerColor: "--md-var-container-color",
+  containerImage: "--md-var-container-image",
+  containerOpacity: "--md-var-container-opacity",
+
+  // State
+  stateContentOpacity: "--md-var-state-surface-overlay-opacity",
+  stateStateLayerOpacity: "--md-var-state-layer-opacity",
+  stateContainerOpacity: "--md-var-state-container-opacity",
+
+  // Elevation
+  elevationSurfaceOverlayOpacity: "--md-var-elevation-surface-tint-opacity",
+  elevationBoxShadowUmbra: "--md-var-elevation-box-shadow-umbra",
+  elevationBoxShadowPenumbra: "--md-var-elevation-box-shadow-penumbra",
+};
+
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
     return ({ addBase, matchUtilities, theme, addUtilities }) => {
@@ -63,36 +88,34 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
       addUtilities({
         ".material": {
-          "--md-var-ripple-color": "transparent",
-          "--md-var-ripple-image":
+          [vars.rippleColor]: "transparent",
+          [vars.rippleImage]:
             "linear-gradient(0deg, transparent 0%, transparent 0%)",
-          "--md-var-ripple-opacity": "1",
-          "--md-var-state-layer-color": "transparent",
-          "--md-var-state-layer-image":
+          [vars.stateLayerColor]: "transparent",
+          [vars.stateLayerImage]:
             "linear-gradient(0deg, transparent 0%, transparent 0%)",
-          "--md-var-state-layer-opacity": "1",
-          "--md-var-surface-overlay-color": "transparent",
-          "--md-var-surface-overlay-image":
+          [vars.surfaceOverlayColor]: "transparent",
+          [vars.surfaceOverlayImage]:
             "linear-gradient(0deg, transparent 0%, transparent 0%)",
-          "--md-var-container-color": "transparent",
-          "--md-var-container-image":
+          [vars.containerColor]: "transparent",
+          [vars.containerImage]:
             "linear-gradient(0deg, transparent 0%, transparent 0%)",
           backgroundImage: `
             /* Ripple Layer */
-            var(--md-var-ripple-image),
-            linear-gradient(0deg, var(--md-var-ripple-color) 0%, var(--md-var-ripple-color) 100%),
+            var(${vars.rippleImage}),
+            linear-gradient(0deg, var(${vars.rippleColor}) 0%, var(${vars.rippleColor}) 100%),
 
             /* State Layer */
-            var(--md-var-state-layer-image),
-            linear-gradient(0deg, var(--md-var-state-layer-color) 0%, var(--md-var-state-layer-color) 100%),
+            var(${vars.stateLayerImage}),
+            linear-gradient(0deg, var(${vars.stateLayerColor}) 0%, var(${vars.stateLayerColor}) 100%),
 
             /* Surface Overlay */
-            var(--md-var-surface-overlay-image),
-            linear-gradient(0deg, var(--md-var-surface-overlay-color) 0%, var(--md-var-surface-overlay-color) 100%),
+            var(${vars.surfaceOverlayImage}),
+            linear-gradient(0deg, var(${vars.surfaceOverlayColor}) 0%, var(${vars.surfaceOverlayColor}) 100%),
 
             /* Container */
-            var(--md-var-container-image),
-            linear-gradient(0deg, var(--md-var-container-color) 0%, var(--md-var-container-color) 100%)
+            var(${vars.containerImage}),
+            linear-gradient(0deg, var(${vars.containerColor}) 0%, var(${vars.containerColor}) 100%)
             `,
         },
       });
@@ -101,33 +124,33 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         {
           ripple: (value) => {
             return {
-              "--md-var-ripple-color": _toRgbWithOpacity(
+              [vars.rippleColor]: _toRgbWithOpacity(
                 value,
-                "var(--md-var-ripple-opacity, 1)",
+                `var(${vars.rippleOpacity}, 1)`,
               ),
             };
           },
           "state-layer": (value) => {
             return {
-              "--md-var-state-layer-color": _toRgbWithOpacity(
+              [vars.stateLayerColor]: _toRgbWithOpacity(
                 value,
-                "var(--md-var-state-layer-opacity, 1)",
+                `var(${vars.stateLayerOpacity}, 1)`,
               ),
             };
           },
           "surface-overlay": (value) => {
             return {
-              "--md-var-surface-overlay-color": _toRgbWithOpacity(
+              [vars.surfaceOverlayColor]: _toRgbWithOpacity(
                 value,
-                "var(--md-var-surface-overlay-opacity, 1)",
+                `var(${vars.surfaceOverlayOpacity}, 1)`,
               ),
             };
           },
           container: (value) => {
             return {
-              "--md-var-container-color": _toRgbWithOpacity(
+              [vars.containerColor]: _toRgbWithOpacity(
                 value,
-                "var(--md-var-container-opacity, 1)",
+                `var(${vars.containerOpacity}, 1)`,
               ),
             };
           },
@@ -142,22 +165,22 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         {
           ripple: (value) => {
             return {
-              "--md-var-ripple-image": value,
+              [vars.rippleImage]: value,
             };
           },
           "state-layer": (value) => {
             return {
-              "--md-var-state-layer-image": value,
+              [vars.stateLayerImage]: value,
             };
           },
           "surface-overlay": (value) => {
             return {
-              "--md-var-surface-overlay-image": value,
+              [vars.surfaceOverlayImage]: value,
             };
           },
           container: (value) => {
             return {
-              "--md-var-container-image": value,
+              [vars.containerImage]: value,
             };
           },
         },
@@ -171,22 +194,22 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         {
           "ripple-opacity": (value) => {
             return {
-              "--md-var-ripple-opacity": value,
+              [vars.rippleOpacity]: value,
             };
           },
           "state-layer-opacity": (value) => {
             return {
-              "--md-var-state-layer-opacity": value,
+              [vars.stateLayerOpacity]: value,
             };
           },
           "surface-overlay-opacity": (value) => {
             return {
-              "--md-var-surface-overlay-opacity": value,
+              [vars.surfaceOverlayOpacity]: value,
             };
           },
           "container-opacity": (value) => {
             return {
-              "--md-var-container-opacity": value,
+              [vars.containerOpacity]: value,
             };
           },
         },
@@ -296,6 +319,21 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
     const boxShadow = toTailwindBoxShadowTheme(md.sys.elevation, {
       prefix: "md-sys-elevation",
     });
+
+    // state
+    opacity["state-content"] = `var(${vars.stateContentOpacity}, 1)`;
+    opacity["state-layer"] = `var(${vars.stateStateLayerOpacity}, 0)`;
+    opacity["state-container"] = `var(${vars.stateContainerOpacity}, 1)`;
+
+    // elevation
+    opacity[
+      "elevation-surface-overlay"
+    ] = `var(${vars.elevationSurfaceOverlayOpacity}, 1)`;
+
+    boxShadow["elevation"] = `
+      var(${vars.elevationBoxShadowUmbra}, 0 0 0 0) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), 
+      var(${vars.elevationBoxShadowPenumbra}, 0 0 0 0) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 15%))
+    `;
 
     if (opts?.emitReferenceClasses) {
       colors = {

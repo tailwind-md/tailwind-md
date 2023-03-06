@@ -10,7 +10,9 @@
   $: document.body.dataset.themeMode = dark ? "dark" : "light";
 </script>
 
-<div class="material">
+<div
+  class="material selection:bg-black selection:text-white dark:selection:bg-black dark:selection:text-white"
+>
   <header
     class="w-full sticky top-0 text-on-surface p-8 py-6 items-center flex flex-row gap-4 material container-surface surface-overlay-surface-tint/level2-surface-tint"
   >

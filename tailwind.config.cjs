@@ -6,6 +6,7 @@ const opts = {};
 /** @type {import("tailwindcss").Config} */
 module.exports = {
   content: ["./src/**/*.svelte"],
+  darkMode: ["class", "[data-theme-mode='dark']"],
   theme: {},
   plugins: [
     materialDesign({
