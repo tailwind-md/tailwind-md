@@ -3,6 +3,7 @@ import type { KeyValuePair, ResolvableTo } from "tailwindcss/types/config";
 import { materialDesignTheme, type MaterialDesignConfig } from "./theme";
 export type { MaterialDesignConfig } from "./theme";
 import {
+  camelToKebabCase,
   flattenColors,
   flattenProperties,
   hexToRGBSpaceSeparated,
@@ -43,11 +44,11 @@ const vars = {
 
   // State
   stateContentOpacity: "--md-var-state-surface-overlay-opacity",
-  stateStateLayerOpacity: "--md-var-state-layer-opacity",
+  stateStateLayerOpacity: "--md-var-state-state-layer-opacity",
   stateContainerOpacity: "--md-var-state-container-opacity",
 
   // Elevation
-  elevationSurfaceOverlayOpacity: "--md-var-elevation-surface-tint-opacity",
+  elevationSurfaceTintOpacity: "--md-var-elevation-surface-tint-opacity",
   elevationBoxShadowUmbra: "--md-var-elevation-box-shadow-umbra",
   elevationBoxShadowPenumbra: "--md-var-elevation-box-shadow-penumbra",
 };
@@ -119,6 +120,32 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
             `,
         },
       });
+
+      const _states: Record<string, Record<string, string>> = {};
+
+      for (const [key] of Object.entries(md.sys.state)) {
+        const n = camelToKebabCase(key);
+        _states[`.state-${n}`] = {
+          [vars.stateStateLayerOpacity]: `var(--md-sys-state-${n}-state-layer-opacity)`,
+          [vars.stateContentOpacity]: `var(--md-sys-state-${n}-content-opacity)`,
+          [vars.stateContainerOpacity]: `var(--md-sys-state-${n}-container-opacity)`,
+        };
+      }
+
+      addUtilities(_states);
+
+      const _elevations: Record<string, Record<string, string>> = {};
+
+      for (const [key] of Object.entries(conf.theme.elevation)) {
+        const n = camelToKebabCase(key);
+        _elevations[`.elevation-${n}`] = {
+          [vars.elevationBoxShadowPenumbra]: `var(--md-sys-elevation-${n}-shadow-penumbra)`,
+          [vars.elevationBoxShadowUmbra]: `var(--md-sys-elevation-${n}-shadow-umbra)`,
+          [vars.elevationSurfaceTintOpacity]: `var(--md-sys-elevation-${n}-surface-tint-opacity)`,
+        };
+      }
+
+      addUtilities(_elevations);
 
       matchUtilities(
         {
@@ -327,8 +354,8 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
     // elevation
     opacity[
-      "elevation-surface-overlay"
-    ] = `var(${vars.elevationSurfaceOverlayOpacity}, 1)`;
+      "elevation-surface-tint"
+    ] = `var(${vars.elevationSurfaceTintOpacity}, 1)`;
 
     boxShadow["elevation"] = `
       var(${vars.elevationBoxShadowUmbra}, 0 0 0 0) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), 
