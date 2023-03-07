@@ -1,5 +1,5 @@
 {
-  "name": "@rencedm112/tailwind-md",
+  "name": "@tailwind-md/plugin",
   "private": false,
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
