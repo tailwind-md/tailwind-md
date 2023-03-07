@@ -1,22 +1,25 @@
 import { defineConfig, PluginOption } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import viteTSConfigPaths from "vite-tsconfig-paths";
-import vitePluginDTS from "vite-plugin-dts";
+import tsConfigPathsPlugin from "vite-tsconfig-paths";
+import dtsPlugin from "vite-plugin-dts";
+import solidPlugin from "vite-plugin-solid";
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
-  const plugins: PluginOption[] = [viteTSConfigPaths(), vitePluginDTS()];
-
-  if (mode === "development") {
-    plugins.push(svelte());
-  }
+  const plugins: PluginOption[] = [
+    tsConfigPathsPlugin(),
+    solidPlugin(),
+    dtsPlugin(),
+  ];
 
   return {
+    server: {
+      port: 3000,
+    },
     build: {
       lib: {
-        entry: "./src/index.ts",
+        entry: { plugin: "./src/plugin/index.ts" },
         formats: ["es", "cjs"],
-        name: "TailwindMaterial3",
+        name: "TailwindMaterialDesign",
         fileName: "index",
       },
       rollupOptions: {},

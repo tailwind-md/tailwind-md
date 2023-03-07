@@ -1,16 +1,24 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "target": "ESNext",
     "useDefineForClassFields": true,
     "declaration": true,
     "module": "ESNext",
-    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    //"verbatimModuleSyntax": true,
     "allowJs": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "checkJs": true,
-    "isolatedModules": true,
-    "paths": { "$*": ["./src/*"], "$": ["./src"] }
+    "paths": { "$*": ["./src/*"], "$": ["./src"] },
+    "types": ["vite/client"]
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "./src/**/*.d.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.ts",
+    "./src/**/*.js",
+    "./src/**/*.jsx"
+  ]
 }

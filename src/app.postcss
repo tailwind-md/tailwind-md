@@ -1,3 +1,9 @@
+/*
+ * Custom @property declarations 
+ */
+@layer app-properties {
+}
+
 @layer app-base {
   @tailwind base;
 
@@ -17,6 +23,35 @@
 
 @layer app-utilities {
   @tailwind utilities;
+
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  .ripple-container {
+    @apply relative overflow-hidden;
+
+    & > .ripple {
+      position: absolute; /* The absolute position we mentioned earlier */
+      border-radius: 9999px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.12;
+      transform: scale(0);
+      background-color: currentColor;
+    }
+
+    &:active {
+      & > .ripple {
+        animation: 300ms ease-in-out ripple;
+      }
+    }
+  }
 }
 
 @layer app-variants {

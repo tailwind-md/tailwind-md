@@ -15,3 +15,24 @@ export type DeepReadOnly<T extends Record<string, unknown>> = {
     ? DeepPartial<T[P]>
     : T[P];
 };
+
+export type DeepMerge<
+  T1 extends Record<string, unknown>,
+  T2 extends Record<string, unknown>,
+> = {
+  [P in keyof T1 | keyof T2]: P extends Record<string, unknown>
+    ? never
+    : (T1 & T2)[P];
+};
+
+const x: DeepMerge<
+  { name: { first: string; last: string }; age: number },
+  { name: { first: string; middle: string }; age: number }
+> = {
+  name: {
+    first: "John",
+    last: "Doe",
+    middle: "M",
+  },
+  age: 42,
+};
