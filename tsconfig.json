@@ -8,9 +8,9 @@
     "moduleResolution": "node",
     //"verbatimModuleSyntax": true,
     "allowJs": true,
+    "checkJs": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "checkJs": true,
     "paths": { "$*": ["./src/*"], "$": ["./src"] },
     "types": ["vite/client"]
   },
