@@ -44,7 +44,7 @@ importers:
       autoprefixer: 10.4.14_postcss@8.4.21
       babel-preset-solid: 1.6.13_@babel+core@7.21.3
       eslint: 8.36.0
-      pnpm: 7.29.3
+      pnpm: 7.30.0
       postcss: 8.4.21
       postcss-import: 15.1.0_postcss@8.4.21
       postcss-nesting: 11.2.1_postcss@8.4.21
@@ -90,9 +90,9 @@ importers:
 
   packages/tsconfig:
     specifiers:
-      '@rencedm112/tsconfig': ^2.0.1
+      '@rencedm112/tsconfig': ^3.0.1
     devDependencies:
-      '@rencedm112/tsconfig': 2.0.1
+      '@rencedm112/tsconfig': 3.0.1
 
 packages:
 
@@ -834,8 +834,8 @@ packages:
     resolution: {integrity: sha512-rCvLsebOpdfVEG4M6x2SgAh3Y9CEms0UCFcv9K7HrczAiXL8hFN5d1dMyu4o1492QmUiqgKeO+smdM1/dchgUg==}
     dev: true
 
-  /@rencedm112/tsconfig/2.0.1:
-    resolution: {integrity: sha512-b4Cjm0hbGeqsIKdLqnaE6Udtp1ZXMAaZOw8BsD9s1RbnL7k/cZJ82Sfh7Mjlk4c7P7cd/WlOf2saWfb6IOcwNg==}
+  /@rencedm112/tsconfig/3.0.1:
+    resolution: {integrity: sha512-kgP9PBy5LtnZ1ujg+s0sbJxSdgwWESWJpIhFqgxwvLcx+nPA491C8bngGDYOWejDOljvHXJLUnvI/9jEiH4NvQ==}
     dev: true
 
   /@rollup/pluginutils/5.0.2:
@@ -2532,8 +2532,8 @@ packages:
       pathe: 1.1.0
     dev: true
 
-  /pnpm/7.29.3:
-    resolution: {integrity: sha512-w4tVG3ZV1txgM2bp9/XMmqSYYO3qdhyMVdU8S0zegVvfB6SxNL+nxRq5t7hhw+yc+GrKegyZuIp9aWPhy6NNMA==}
+  /pnpm/7.30.0:
+    resolution: {integrity: sha512-6SUdrWSZ4qvQ4uBVg7smnabVKOFrT7DgSz2NfViG54nRii4ODB395qmHprBiv5WBdlC/jZYBn99fSfmzIMI3WQ==}
     engines: {node: '>=14.6'}
     hasBin: true
     dev: true

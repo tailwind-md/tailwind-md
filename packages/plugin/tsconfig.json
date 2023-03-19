@@ -3,9 +3,16 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./",
+    "rootDir": "./src",
+    "target": "esnext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": false,
+    "verbatimModuleSyntax": true,
     "paths": {
       "~/*": ["./src/*"]
-    }
-  }
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["./src/**/*.*"]
 }

@@ -2,6 +2,6 @@
   "name": "@tailwind-md/tsconfig",
   "version": "0.0.0",
   "devDependencies": {
-    "@rencedm112/tsconfig": "^2.0.1"
+    "@rencedm112/tsconfig": "^3.0.1"
   }
 }
