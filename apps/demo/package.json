@@ -1,0 +1,15 @@
+{
+  "name": "@tailwind-md/demo",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "solid-js": "^1.6.15"
+  },
+  "devDependencies": {
+    "@tailwind-md/tsconfig": "workspace:latest"
+  }
+}

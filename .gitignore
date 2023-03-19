@@ -7,6 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Turbo
+.turbo
+*.turbo
+
 node_modules
 dist
 dist-ssr

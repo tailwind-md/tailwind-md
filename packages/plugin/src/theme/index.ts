@@ -6,7 +6,7 @@ import type {
   Typescale,
   Elevation,
   Shape,
-} from "$plugin/types";
+} from "~/types";
 import {
   createReferencePalette,
   createColorScheme,
@@ -16,7 +16,7 @@ import {
   createCustomReferencePalatte,
   createCustomColors,
   type DeepPartial,
-} from "$plugin/utils";
+} from "~/utils";
 
 export type MaterialDesignConfig<CustomColors extends string = string> =
   DeepPartial<{
@@ -51,7 +51,7 @@ export const materialDefaultOptions = {
       scheme: { light: {}, dark: {} },
       seedReferencePalette: {},
       custom: {},
-    } satisfies Required<MaterialDesignConfig["theme"]["color"]>,
+    } satisfies Required<Required<MaterialDesignConfig>["theme"]["color"]>,
     state: {
       hovered: {
         contentOpacity: "100%",
@@ -238,7 +238,7 @@ type MaterialDesignTheme = {
 type MergedConfig = typeof materialDefaultOptions;
 
 let _mdt: MaterialDesignTheme | undefined;
-let _lastOpts: MaterialDesignConfig | undefined;
+// let _lastOpts: MaterialDesignConfig | undefined;
 let _lastMergedConfig: MergedConfig | undefined;
 
 export function materialDesignTheme(opts: MaterialDesignConfig): {
@@ -252,7 +252,7 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
   //   return { theme: _mdt, mergedConfig: _lastMergedConfig };
   // }
 
-  _lastOpts = opts;
+  // _lastOpts = opts;
 
   _lastMergedConfig = deepMerge(materialDefaultOptions, opts);
 
@@ -275,7 +275,7 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
     {
       ref: {
         palette: createCustomReferencePalatte(
-          _lastMergedConfig.theme.color.seedReferencePalette ?? {},
+          _lastMergedConfig.theme.color.seedReferencePalette ?? {}
         ),
       },
     },
@@ -283,15 +283,15 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
       sys: {
         color: {
           light: objectHexToRGBSpaceSeparated(
-            _lastMergedConfig.theme.color.scheme.light,
+            _lastMergedConfig.theme.color.scheme.light
           ),
           dark: objectHexToRGBSpaceSeparated(
-            _lastMergedConfig.theme.color.scheme.dark,
+            _lastMergedConfig.theme.color.scheme.dark
           ),
         },
       },
     },
-    { ...createCustomColors(_lastMergedConfig.theme.color.custom) },
+    { ...createCustomColors(_lastMergedConfig.theme.color.custom) }
   ) as unknown as MaterialDesignTheme;
 
   return { theme: _mdt, mergedConfig: _lastMergedConfig };

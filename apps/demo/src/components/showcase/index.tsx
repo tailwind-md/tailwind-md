@@ -8,7 +8,7 @@ export default function Showcase() {
   const [dark, setDark] = createSignal(false);
 
   createEffect(() => {
-    document.body.dataset.themeMode = dark() ? "dark" : "light";
+    document.body.dataset["themeMode"] = dark() ? "dark" : "light";
   });
 
   return (

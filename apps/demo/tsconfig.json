@@ -1,0 +1,25 @@
+{
+  "extends": ["./node_modules/@tailwind-md/tsconfig/base.json"],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "declaration": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "baseUrl": "./",
+    "checkJs": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "paths": { "~/*": ["./src/*"] },
+    "types": ["vite/client"]
+  },
+  "include": [
+    "./src/**/*.d.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.ts",
+    "./src/**/*.js",
+    "./src/**/*.jsx"
+  ]
+}

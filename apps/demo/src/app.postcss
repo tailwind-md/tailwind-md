@@ -1,0 +1,33 @@
+/*
+ * Custom @property declarations 
+ */
+@layer app-properties {
+}
+
+@layer app-base {
+  @tailwind base;
+
+  * {
+    @apply transition-colors;
+  }
+
+  html,
+  body {
+    @apply min-h-screen bg-background;
+  }
+}
+
+@layer app-components {
+  @tailwind components;
+}
+
+@layer app-utilities {
+  @tailwind utilities;
+}
+
+@layer app-variants {
+  @tailwind variants;
+}
+
+@layer app-overrides {
+}

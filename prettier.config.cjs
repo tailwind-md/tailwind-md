@@ -1,3 +1,4 @@
-const def = require("@rencedm112/prettier-config");
-
-module.exports = { ...def };
+/** @type {import("prettier").Config} */
+module.exports = {
+  ...require("@tailwind-md/prettier-config").default,
+};

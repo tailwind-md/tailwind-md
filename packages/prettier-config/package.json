@@ -1,0 +1,9 @@
+{
+  "name": "@tailwind-md/prettier-config",
+  "main": "prettier.config.cjs",
+  "types": "prettier.config.d.ts",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@rencedm112/prettier-config": "^3.1.1"
+  }
+}

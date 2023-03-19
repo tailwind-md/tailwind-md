@@ -3,7 +3,7 @@ import {
   CorePalette,
   TonalPalette as OldTonalPalette,
   argbFromHex,
-} from "$plugin/material-color";
+} from "~/material-color";
 import type {
   ReferencePalette,
   SystemColorScheme,
@@ -14,7 +14,7 @@ import type {
   FontStyle,
   Elevation,
   ElevationDistance,
-} from "$plugin/types";
+} from "~/types";
 import type { DeepPartial } from "./types";
 
 export * from "./types";
@@ -50,29 +50,29 @@ function pf(p: string) {
 
 export function toCSSVariables(
   o: Record<string, unknown>,
-  opts?: TransormerOptions,
+  opts?: TransormerOptions
 ): Record<string, string> {
-  opts = { ...defaultTransformerOptions, ...opts };
+  const merged = { ...defaultTransformerOptions, ...opts };
   const vars: Record<`--${string}`, string> = {};
   for (const [key, value] of Object.entries(o)) {
-    const k = `--${pf(opts.prefix)}${camelToKebabCase(
-      opts.createKey(key, value),
+    const k = `--${pf(merged.prefix)}${camelToKebabCase(
+      merged.createKey(key, value)
     )}`;
 
-    vars[k] = `${value}`;
+    vars[k as keyof typeof vars] = `${value}`;
   }
   return vars;
 }
 
 export function toClassNames<K extends unknown>(
   o: Record<string, K>,
-  opts?: TransormerOptions,
+  opts?: TransormerOptions
 ): Record<string, K> {
-  opts = { ...defaultTransformerOptions, ...opts };
+  const merged = { ...defaultTransformerOptions, ...opts };
   const c: Record<string, K> = {};
 
   for (const [key, value] of Object.entries(o)) {
-    c[`${pf(opts.prefix)}${camelToKebabCase(opts.createKey(key, value))}`] =
+    c[`${pf(merged.prefix)}${camelToKebabCase(merged.createKey(key, value))}`] =
       value;
   }
 
@@ -81,7 +81,7 @@ export function toClassNames<K extends unknown>(
 
 function flattenObject(
   o: Record<string, unknown>,
-  opts?: TransormerOptions,
+  opts?: TransormerOptions
 ): Record<string, unknown> {
   opts = { ...defaultTransformerOptions, ...opts };
   const flattened: Record<string, unknown> = {};
@@ -91,7 +91,7 @@ function flattenObject(
 
     if (typeof v === "object") {
       for (const [k2, v2] of Object.entries(
-        flattenObject(v as Record<string, unknown>, { prefix: key }),
+        flattenObject(v as Record<string, unknown>, { prefix: key })
       )) {
         flattened[k2] = v2;
       }
@@ -104,13 +104,13 @@ function flattenObject(
 }
 
 export function flattenProperties(
-  o: Record<string, unknown>,
+  o: Record<string, unknown>
 ): Record<string, unknown> {
   return flattenObject(o, { prefix: "" });
 }
 
 export function capitalize<S extends string>(s: S): Capitalize<S> {
-  return (s[0].toUpperCase() + s.slice(1)) as unknown as Capitalize<S>;
+  return (s.slice(0, 1).toUpperCase() + s.slice(1)) as unknown as Capitalize<S>;
 }
 
 function createBlankTonalPalette(): TonalPalette {
@@ -137,45 +137,45 @@ function switchMode<V>(mode: "light" | "dark", lightValue: V, darkValue: V): V {
 
 function createSystemKeyColors<C extends string>(
   color: C,
-  mode: "light" | "dark" = "light",
+  mode: "light" | "dark" = "light"
 ): SystemKeyColor<C> {
   return {
     [`${color}`]: `var(--md-ref-palette-${color}${switchMode(mode, 40, 80)})`,
     [`on${capitalize(color)}`]: `var(--md-ref-palette-${color}${switchMode(
       mode,
       100,
-      20,
+      20
     )})`,
     [`${color}Container`]: `var(--md-ref-palette-${color}${switchMode(
       mode,
       90,
-      30,
+      30
     )})`,
     [`on${capitalize(
-      color,
+      color
     )}Container`]: `var(--md-ref-palette-${color}${switchMode(mode, 10, 90)})`,
   } as unknown as SystemKeyColor<C>;
 }
 
 export function toTailwindColorTheme(
   o: Record<string, string | TonalPalette>,
-  opts?: ThemeTransformerOptions,
+  opts?: ThemeTransformerOptions
 ): Record<string, string | TonalPalette> {
-  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const merged = { ...defaultThemeTransformerOptions, ...opts };
   const x: Record<string, string | TonalPalette> = {};
 
   for (let [k, v] of Object.entries(o)) {
-    const newKey = camelToKebabCase(opts.createKey(k, v));
-    const cssVar = camelToKebabCase(opts.createValue(k, v));
+    const newKey = camelToKebabCase(merged.createKey(k, v));
+    const cssVar = camelToKebabCase(merged.createValue(k, v));
 
     if (typeof v === "string") {
-      x[newKey] = `rgb(var(--${pf(opts.prefix)}${cssVar}) / <alpha-value>)`;
+      x[newKey] = `rgb(var(--${pf(merged.prefix)}${cssVar}) / <alpha-value>)`;
     } else {
       x[newKey] = createBlankTonalPalette();
       for (const [k2] of Object.entries(v)) {
-        x[newKey][k2] = `rgb(var(--${pf(
-          opts.prefix,
-        )}${cssVar}${k2}) / <alpha-value>)`;
+        (x[newKey as keyof typeof x] as TonalPalette)[
+          k2 as unknown as keyof TonalPalette
+        ] = `rgb(var(--${pf(merged.prefix)}${cssVar}${k2}) / <alpha-value>)`;
       }
     }
   }
@@ -189,15 +189,15 @@ export function toTailwindColorTheme(
 
 export function toTailwindTheme<V>(
   o: Record<string, V>,
-  opts?: ThemeTransformerOptions,
+  opts?: ThemeTransformerOptions
 ): Record<string, string> {
-  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const merged = { ...defaultThemeTransformerOptions, ...opts };
   const x: Record<string, string> = {};
 
   for (let [k, v] of Object.entries(o)) {
-    x[camelToKebabCase(opts.createKey(k, v))] = `var(--${pf(
-      opts.prefix,
-    )}${camelToKebabCase(opts.createValue(k, v))})`;
+    x[camelToKebabCase(merged.createKey(k, v))] = `var(--${pf(
+      merged.prefix
+    )}${camelToKebabCase(merged.createValue(k, v))})`;
   }
 
   return x;
@@ -210,15 +210,15 @@ type FontSizeTheme = Record<
 
 export function toTailwindFontSizeTheme(
   x: Record<string, FontStyle>,
-  opts?: ThemeTransformerOptions,
+  opts?: ThemeTransformerOptions
 ): FontSizeTheme {
-  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const merged = { ...defaultThemeTransformerOptions, ...opts };
   const t: FontSizeTheme = {};
 
   for (const [k, v] of Object.entries(x)) {
-    const p = pf(opts.prefix);
-    const cssVar = camelToKebabCase(opts.createValue(k, v));
-    t[camelToKebabCase(opts.createKey(k, v))] = [
+    const p = pf(merged.prefix);
+    const cssVar = camelToKebabCase(merged.createValue(k, v));
+    t[camelToKebabCase(merged.createKey(k, v))] = [
       `var(--${p}${cssVar}-size)`,
       {
         fontWeight: `var(--${p}${cssVar}-weight)`,
@@ -232,7 +232,7 @@ export function toTailwindFontSizeTheme(
 }
 
 export function createColorScheme(
-  mode: "light" | "dark" = "light",
+  mode: "light" | "dark" = "light"
 ): SystemColorScheme {
   return {
     // Neutrals
@@ -240,19 +240,19 @@ export function createColorScheme(
     outlineVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
       80,
-      30,
+      30
     )})`,
     surface: `var(--md-ref-palette-neutral${switchMode(mode, 99, 10)})`,
     onSurface: `var(--md-ref-palette-neutral${switchMode(mode, 10, 90)})`,
     surfaceVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
       90,
-      30,
+      30
     )})`,
     onSurfaceVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
       30,
-      80,
+      80
     )})`,
     background: `var(--md-ref-palette-neutral${switchMode(mode, 99, 10)})`,
     onBackground: `var(--md-ref-palette-neutral${switchMode(mode, 10, 90)})`,
@@ -275,7 +275,7 @@ export function createColorScheme(
     inverseOnSurface: `var(--md-ref-palette-neutral${switchMode(
       mode,
       95,
-      20,
+      20
     )})`,
     surfaceTint: `var(--md-sys-color-primary)`,
   };
@@ -318,7 +318,7 @@ export function createReferencePalette(hex: string): ReferencePalette {
 
   for (const [a, b] of x.map<[TonalPalette, OldTonalPalette]>((x, i) => [
     x,
-    y[i],
+    y[i]!,
   ])) {
     for (const t of tones) {
       a[t] = hexToRGBSpaceSeparated(hexFromArgb(b.tone(t)));
@@ -338,7 +338,7 @@ export function createReferencePalette(hex: string): ReferencePalette {
 }
 
 export function objectHexToRGBSpaceSeparated(
-  o: Record<string, string>,
+  o: Record<string, string>
 ): Record<string, string> {
   const x: Record<string, string> = {};
 
@@ -351,7 +351,7 @@ export function objectHexToRGBSpaceSeparated(
 
 function deepMergeImpl<T extends Record<string, unknown>>(
   o1: T,
-  o2: DeepPartial<T>,
+  o2: DeepPartial<T>
 ): T {
   const merged: T = { ...o1 };
 
@@ -360,7 +360,7 @@ function deepMergeImpl<T extends Record<string, unknown>>(
       if (typeof merged[key] === "object") {
         merged[key as keyof T] = deepMergeImpl(
           o1[key] as T,
-          value as T,
+          value as T
         ) as T[keyof T];
       } else {
         if (value !== "undefined") {
@@ -397,15 +397,15 @@ export function hexToRGB(h: string): [number, number, number] {
 
   const singleDigit = h.length === 4;
 
-  const r = singleDigit ? parseInt(h[1]) : parseInt(h[1] + h[2], 16);
-  const g = singleDigit ? parseInt(h[2]) : parseInt(h[3] + h[4], 16);
-  const b = singleDigit ? parseInt(h[3]) : parseInt(h[5] + h[6], 16);
+  const r = singleDigit ? parseInt(h[1]!) : parseInt(h[1]! + h[2]!, 16);
+  const g = singleDigit ? parseInt(h[2]!) : parseInt(h[3]! + h[4]!, 16);
+  const b = singleDigit ? parseInt(h[3]!) : parseInt(h[5]! + h[6]!, 16);
 
   return [r, g, b];
 }
 
 export function hexToRGBSpaceSeparated(
-  h: string,
+  h: string
 ): `${number} ${number} ${number}` {
   const [r, g, b] = hexToRGB(h);
 
@@ -414,7 +414,7 @@ export function hexToRGBSpaceSeparated(
 
 export function deepEqual<T1 extends object, T2 extends object>(
   o1: T1,
-  o2: T2,
+  o2: T2
 ): boolean {
   if (typeof o1 !== typeof o2) {
     return false;
@@ -422,15 +422,15 @@ export function deepEqual<T1 extends object, T2 extends object>(
 
   for (const [key, value] of Object.entries(o2)) {
     if (typeof value === "object") {
-      if (typeof o1[key] === "object") {
-        if (!deepEqual(o1[key] as T1, value as T2)) {
+      if (typeof o1[key as keyof typeof o1] === "object") {
+        if (!deepEqual(o1[key as keyof typeof o1] as T1, value as T2)) {
           return false;
         }
       } else {
         return false;
       }
     } else {
-      if (o1[key] !== value) {
+      if (o1[key as keyof typeof o1] !== value) {
         return false;
       }
     }
@@ -460,12 +460,12 @@ export function createTonalPalette(hex: string): TonalPalette {
 }
 
 export function createCustomReferencePalatte(
-  o: Partial<Record<BaseColor, string>>,
+  o: Partial<Record<BaseColor, string>>
 ): Partial<Record<BaseColor, TonalPalette>> {
   const x: Partial<Record<BaseColor, TonalPalette>> = {};
 
   for (const [k, v] of Object.entries(o)) {
-    x[k] = createTonalPalette(v);
+    x[k as keyof typeof o] = createTonalPalette(v);
   }
 
   return x;
@@ -478,7 +478,7 @@ type CustomColors = {
 
 export function createCustomColors(
   o: Record<string, string>,
-  mode: "light" | "dark" = "light",
+  mode: "light" | "dark" = "light"
 ): CustomColors {
   const x: CustomColors = { ref: { palette: {} }, sys: { color: {} } };
 
@@ -501,7 +501,7 @@ export function surfaceTintOpacity(elevationLevel: ElevationDistance): number {
     0.02 * elevationLevel ** 3 -
       0.4686 * elevationLevel ** 2 +
       3.8613 * elevationLevel +
-      0.5689,
+      0.5689
   );
 }
 
@@ -523,12 +523,12 @@ export function shadowUmbra(distance: ElevationDistance): BoxShadow {
         : 0.0054 * distance ** 3 -
             0.0756 * distance ** 2 +
             0.4406 * distance +
-            0.2473,
+            0.2473
     )}px`,
     blurRadius: `${Math.round(
       distance === 0
         ? 0
-        : 0.0076 * distance - 0.1573 * distance + 1.0961 * distance + 0.3605,
+        : 0.0076 * distance - 0.1573 * distance + 1.0961 * distance + 0.3605
     )}px`,
     spreadRadius: "0px",
   };
@@ -542,10 +542,10 @@ export function shadowPenumbra(distance: ElevationDistance): BoxShadow {
     yOffset: `${Math.round(
       distance === 0
         ? 0
-        : -0.0032 * distance + 0.0533 * distance + 0.4782 * distance + 0.187,
+        : -0.0032 * distance + 0.0533 * distance + 0.4782 * distance + 0.187
     )}px`,
     blurRadius: `${Math.round(
-      distance === 0 ? 0 : -0.0637 * distance ** 2 + 1.6862 * distance + 0.7669,
+      distance === 0 ? 0 : -0.0637 * distance ** 2 + 1.6862 * distance + 0.7669
     )}px`,
     spreadRadius: `${Math.round(
       distance === 0
@@ -553,22 +553,22 @@ export function shadowPenumbra(distance: ElevationDistance): BoxShadow {
         : 0.0042 * distance ** 3 -
             0.0783 * distance ** 2 +
             0.8299 * distance +
-            0.0984,
+            0.0984
     )}px`,
   };
 }
 
 export function toTailwindBoxShadowTheme(
   elevation: Elevation,
-  opts?: ThemeTransformerOptions,
+  opts?: ThemeTransformerOptions
 ): Record<string, string> {
-  opts = { ...defaultThemeTransformerOptions, ...opts };
+  const merged = { ...defaultThemeTransformerOptions, ...opts };
   const t: Record<string, string> = {};
 
   for (const [k, v] of Object.entries(elevation)) {
-    const p = pf(opts.prefix);
-    const cssVar = camelToKebabCase(opts.createValue(k, v));
-    t[camelToKebabCase(opts.createKey(k, v))] = `
+    const p = pf(merged.prefix);
+    const cssVar = camelToKebabCase(merged.createValue(k, v));
+    t[camelToKebabCase(merged.createKey(k, v))] = `
     var(--${p}${cssVar}-shadow-umbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), 
     var(--${p}${cssVar}-shadow-penumbra) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 15%))
     `;

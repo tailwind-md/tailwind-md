@@ -18,7 +18,8 @@ import {
   toTailwindTheme,
 } from "./utils";
 
-type RTKVP = ResolvableTo<KeyValuePair<string, string>>;
+type RTKVP = ResolvableTo<KeyValuePair<string, string>> &
+  Record<string, unknown>;
 
 function _toRgbWithOpacity(value: string, opacity: string): string {
   return typeof value === "function"
@@ -55,16 +56,16 @@ const vars = {
 
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
-    return ({ addBase, matchUtilities, theme, addUtilities, config }) => {
+    return ({ addBase, matchUtilities, theme, addUtilities }) => {
       // add base
       const { theme: md, mergedConfig: conf } = materialDesignTheme(opts);
 
       const color = { ...md.sys.color };
-      delete md.sys.color;
+      delete (md.sys as any).color;
 
       const els = { ...md.sys.elevation };
 
-      delete md.sys.elevation;
+      delete (md.sys as any).elevation;
 
       const elevations: Record<
         string,
@@ -186,7 +187,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
             return {
               [vars.stateLayerColor]: _toRgbWithOpacity(
                 value,
-                `var(${vars.stateLayerOpacity}, 1)`,
+                `var(${vars.stateLayerOpacity}, 1)`
               ),
             };
           },
@@ -194,7 +195,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
             return {
               [vars.surfaceOverlayColor]: _toRgbWithOpacity(
                 value,
-                `var(${vars.surfaceOverlayOpacity}, 1)`,
+                `var(${vars.surfaceOverlayOpacity}, 1)`
               ),
             };
           },
@@ -202,7 +203,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
             return {
               [vars.containerColor]: _toRgbWithOpacity(
                 value,
-                `var(${vars.containerOpacity}, 1)`,
+                `var(${vars.containerOpacity}, 1)`
               ),
             };
           },
@@ -210,7 +211,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         {
           values: flattenColors(theme("colors")),
           type: ["color", "any"],
-        },
+        }
       );
 
       matchUtilities(
@@ -237,9 +238,9 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           },
         },
         {
-          values: theme("backgroundImage"),
+          values: theme("backgroundImage")!,
           type: ["image", "any"],
-        },
+        }
       );
 
       matchUtilities(
@@ -266,16 +267,16 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           },
         },
         {
-          values: theme("opacity"),
+          values: theme("opacity")!,
           type: ["percentage", "any"],
-        },
+        }
       );
 
       addBase({
         ":root": toCSSVariables(
           flattenProperties({
             md,
-          }),
+          })
         ),
       });
 
@@ -287,7 +288,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
                 elevation: elevations,
               },
             },
-          }),
+          })
         ),
       });
 
@@ -299,7 +300,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
                 color: color[conf.defaultThemeMode],
               },
             },
-          }),
+          })
         ),
       });
 
@@ -314,7 +315,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
                   color: color.dark,
                 },
               },
-            }),
+            })
           ),
         });
         addBase({
@@ -325,7 +326,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
                   color: color.light,
                 },
               },
-            }),
+            })
           ),
         });
       } else {
@@ -338,7 +339,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
                     color: color.dark,
                   },
                 },
-              }),
+              })
             ),
           });
           addBase({
@@ -349,7 +350,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
                     color: color.light,
                   },
                 },
-              }),
+              })
             ),
           });
         }
@@ -424,7 +425,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         },
       },
     };
-  },
+  }
 );
 
 export default materialDesignPlugin;
