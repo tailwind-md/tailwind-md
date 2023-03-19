@@ -6,7 +6,7 @@
       "outputs": ["./dist/**.*", "./build/**.*"]
     },
     "publish": {
-      "dependsOn": ["build"],
+      "dependsOn": ["build", "^publish"],
       "inputs": ["./dist/**.*", "./build/**.*"]
     },
     "dev": {
