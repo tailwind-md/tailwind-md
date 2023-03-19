@@ -6,6 +6,7 @@
     "build": "turbo build",
     "publish": "turbo publish",
     "dev": "turbo dev",
+    "publish-package": "turbo publish-package",
     "check-deps": "manypkg check",
     "fix-deps": "manypkg fix",
     "postinstall": "pnpm run check-deps"
