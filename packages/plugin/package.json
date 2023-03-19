@@ -8,7 +8,7 @@
   "module": "./dist/index.js",
   "scripts": {
     "build": "vite build && tsc -p tsconfig.types.json",
-    "publish": "pnpm publish --access public"
+    "publish-package": "pnpm publish --access public"
   },
   "exports": {
     ".": {

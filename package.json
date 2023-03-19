@@ -3,12 +3,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build": "turbo build",
+    "publish": "turbo publish",
+    "dev": "turbo dev",
     "check-deps": "manypkg check",
     "fix-deps": "manypkg fix",
     "postinstall": "pnpm run check-deps"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
+    "@changesets/cli": "^2.26.0",
     "@manypkg/cli": "^0.20.0",
     "@tailwind-md/eslint-config": "workspace:latest",
     "@tailwind-md/plugin": "workspace:latest",

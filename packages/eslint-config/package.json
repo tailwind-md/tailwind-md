@@ -2,7 +2,7 @@
   "name": "@tailwind-md/eslint-config",
   "version": "0.0.1",
   "scripts": {
-    "publish": "pnpm publish --access public"
+    "publish-package": "pnpm publish --access public"
   },
   "main": ".eslintrc.cjs"
 }

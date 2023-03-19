@@ -4,7 +4,7 @@
   "types": "prettier.config.d.ts",
   "version": "0.0.1",
   "scripts": {
-    "publish": "pnpm publish --access public"
+    "publish-package": "pnpm publish --access public"
   },
   "devDependencies": {
     "@rencedm112/prettier-config": "^3.1.1"
