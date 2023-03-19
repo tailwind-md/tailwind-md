@@ -10,6 +10,6 @@
     "solid-js": "^1.6.15"
   },
   "devDependencies": {
-    "@tailwind-md/tsconfig": "workspace:latest"
+    "@tailwind-md/tsconfig": "workspace:*"
   }
 }

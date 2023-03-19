@@ -19,7 +19,7 @@
   "devDependencies": {
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7",
-    "@tailwind-md/tsconfig": "workspace:latest"
+    "@tailwind-md/tsconfig": "workspace:*"
   },
   "files": [
     "./dist"
