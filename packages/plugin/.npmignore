@@ -1,6 +1,4 @@
 /src
-/svelte.config.js
-/postcss.config.cjs
 /tsconfig.json
 /tsconfig.node.json
 /vite.config.ts
