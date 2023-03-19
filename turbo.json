@@ -1,13 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "lint": {},
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["lint", "^build"],
       "outputs": ["./dist/**.*", "./build/**.*"]
     },
-    "publish": {
-      "dependsOn": ["build", "^publish"],
-      "inputs": ["./dist/**.*", "./build/**.*"]
+    "publish-package": {
+      "dependsOn": ["build", "^publish-package"]
     },
     "dev": {
       "persistent": true,
