@@ -6,7 +6,7 @@ import type {
   Typescale,
   Elevation,
   Shape,
-} from "~/types";
+} from "../types";
 import {
   createReferencePalette,
   createColorScheme,
@@ -16,7 +16,7 @@ import {
   createCustomReferencePalatte,
   createCustomColors,
   type DeepPartial,
-} from "~/utils";
+} from "../utils";
 
 export type MaterialDesignConfig<CustomColors extends string = string> =
   DeepPartial<{

@@ -3,7 +3,7 @@ import {
   CorePalette,
   TonalPalette as OldTonalPalette,
   argbFromHex,
-} from "~/material-color";
+} from "../material-color";
 import type {
   ReferencePalette,
   SystemColorScheme,
@@ -14,7 +14,7 @@ import type {
   FontStyle,
   Elevation,
   ElevationDistance,
-} from "~/types";
+} from "../types";
 import type { DeepPartial } from "./types";
 
 export * from "./types";
