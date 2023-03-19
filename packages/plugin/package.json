@@ -1,6 +1,7 @@
 {
   "name": "@tailwind-md/plugin",
   "version": "0.1.1",
+  "type": "module",
   "private": false,
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",

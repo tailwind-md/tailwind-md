@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-//import dts from "vite-plugin-dts";
+import dts from "vite-plugin-dts";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(() => {
@@ -13,6 +13,6 @@ export default defineConfig(() => {
       },
       rollupOptions: {},
     },
-    plugins: [tsConfigPaths()],
+    plugins: [dts(), tsConfigPaths()],
   };
 });

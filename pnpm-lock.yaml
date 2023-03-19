@@ -74,7 +74,7 @@ importers:
 
   packages/plugin:
     specifiers:
-      '@tailwind-md/tsconfig': workspace:^0.0.0
+      '@tailwind-md/tsconfig': workspace:latest
       postcss: ^8.4.21
       tailwindcss: ^3.2.7
     devDependencies:
