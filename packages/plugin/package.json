@@ -1,6 +1,6 @@
 {
   "name": "@tailwind-md/plugin",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "module",
   "private": false,
   "main": "./dist/index.cjs",
@@ -13,7 +13,8 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "devDependencies": {
