@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.1.8
+
+### Patch Changes
+
+- Changed surface-overlay-opacity-levelX-surface-tint class names to surface-overlay-opacity-levelX
+
 ## 0.1.6
 
 ### Patch Changes

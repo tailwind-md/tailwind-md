@@ -372,7 +372,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       }),
       ...toTailwindTheme(flattenProperties(md.sys.elevation), {
         prefix: "md-sys-elevation",
-        createKey: (k) => `${k}-surface-tint`,
+        createKey: (k) => `${k}`,
         createValue: (k) => `${k}-surface-tint-opacity`,
       }),
     } as unknown as RTKVP;
