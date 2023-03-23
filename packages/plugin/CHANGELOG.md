@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.2.1
+
+### Patch Changes
+
+- Fix plugin peer modifier
+
 ## 0.2.0
 
 ### Minor Changes

@@ -343,7 +343,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       );
 
       matchVariant(
-        "group-state",
+        "peer-state",
         (value) => {
           return `:merge(.peer).state-${value} ~ &`;
         },
