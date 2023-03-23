@@ -1,9 +1,7 @@
 {
   "name": "@tailwind-md/tsconfig",
   "version": "0.0.2",
-  "scripts": {
-    "publish-package": "pnpm publish --access public"
-  },
+  "scripts": {},
   "devDependencies": {
     "@rencedm112/tsconfig": "^3.0.1"
   }

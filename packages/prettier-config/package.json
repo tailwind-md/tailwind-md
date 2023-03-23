@@ -3,9 +3,7 @@
   "main": "prettier.config.cjs",
   "types": "prettier.config.d.ts",
   "version": "0.0.3",
-  "scripts": {
-    "publish-package": "pnpm publish --access public"
-  },
+  "scripts": {},
   "devDependencies": {
     "@rencedm112/prettier-config": "^3.1.1"
   }

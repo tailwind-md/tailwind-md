@@ -2,9 +2,7 @@
   "name": "@tailwind-md/eslint-config",
   "version": "0.0.3",
   "main": "./src/index.cjs",
-  "scripts": {
-    "publish-package": "pnpm publish --access public"
-  },
+  "scripts": {},
   "devDependencies": {
     "@rencedm112/eslint-config": "^0.0.3",
     "@types/eslint": "^8.21.3",
