@@ -323,6 +323,44 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         }
       );
 
+      matchVariant(
+        "group-state",
+        (value) => {
+          return `:merge(.group).state-${value} &`;
+        },
+        {
+          values: {
+            hovered: "hovered",
+            focused: "focused",
+            pressed: "pressed",
+            dragged: "dragged",
+            disabled: "disabled",
+            selected: "selected",
+            activated: "activated",
+            enabled: "enabled",
+          },
+        }
+      );
+
+      matchVariant(
+        "group-state",
+        (value) => {
+          return `:merge(.peer).state-${value} ~ &`;
+        },
+        {
+          values: {
+            hovered: "hovered",
+            focused: "focused",
+            pressed: "pressed",
+            dragged: "dragged",
+            disabled: "disabled",
+            selected: "selected",
+            activated: "activated",
+            enabled: "enabled",
+          },
+        }
+      );
+
       const themeMode = conf.themeMode;
 
       if (typeof themeMode === "string") {

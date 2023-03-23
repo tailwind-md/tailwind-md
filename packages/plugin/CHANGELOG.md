@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.2.0
+
+### Minor Changes
+
+- Update state modifier to have group and peer modifier
+
 ## 0.1.9
 
 ### Patch Changes
