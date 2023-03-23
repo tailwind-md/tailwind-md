@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.1.9
+
+### Patch Changes
+
+- Added state modifier for plugin
+
 ## 0.1.8
 
 ### Patch Changes

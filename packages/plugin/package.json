@@ -1,6 +1,6 @@
 {
   "name": "@tailwind-md/plugin",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "type": "module",
   "private": false,
   "main": "./dist/index.cjs",
@@ -18,9 +18,9 @@
     }
   },
   "devDependencies": {
+    "@tailwind-md/tsconfig": "0.0.2",
     "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.7",
-    "@tailwind-md/tsconfig": "workspace:*"
+    "tailwindcss": "^3.2.7"
   },
   "files": [
     "./dist"

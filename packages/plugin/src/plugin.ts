@@ -56,7 +56,7 @@ const vars = {
 
 const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
   (opts) => {
-    return ({ addBase, matchUtilities, theme, addUtilities }) => {
+    return ({ addBase, matchUtilities, matchVariant, theme, addUtilities }) => {
       // add base
       const { theme: md, mergedConfig: conf } = materialDesignTheme(opts);
 
@@ -303,6 +303,25 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           })
         ),
       });
+
+      matchVariant(
+        "state",
+        (value) => {
+          return `&.state-${value}`;
+        },
+        {
+          values: {
+            hovered: "hovered",
+            focused: "focused",
+            pressed: "pressed",
+            dragged: "dragged",
+            disabled: "disabled",
+            selected: "selected",
+            activated: "activated",
+            enabled: "enabled",
+          },
+        }
+      );
 
       const themeMode = conf.themeMode;
 
