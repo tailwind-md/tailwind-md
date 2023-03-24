@@ -90,7 +90,7 @@ export const materialDefaultOptions = {
       },
       disabled: {
         contentOpacity: "38%",
-        stateLayerOpacity: "100%",
+        stateLayerOpacity: "0%",
         containerOpacity: "12%",
       },
     },

@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.2.2
+
+### Patch Changes
+
+- Fixed disabled state bug
+
 ## 0.2.1
 
 ### Patch Changes
