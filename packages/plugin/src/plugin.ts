@@ -149,13 +149,30 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
       const _states: Record<string, Record<string, string>> = {};
 
-      for (const [key] of Object.entries(md.sys.state)) {
+      for (const [key, v] of Object.entries(md.sys.state)) {
         const n = camelToKebabCase(key);
-        _states[`.state-${n}`] = {
-          [vars.stateStateLayerOpacity]: `var(--md-sys-state-${n}-state-layer-opacity)`,
-          [vars.stateContentOpacity]: `var(--md-sys-state-${n}-content-opacity)`,
-          [vars.stateContainerOpacity]: `var(--md-sys-state-${n}-container-opacity)`,
-        };
+        if (v.stateLayerOpacity) {
+          _states[`.state-${n}`] ??= {};
+
+          _states[`.state-${n}`][
+            vars.stateStateLayerOpacity
+          ] = `var(--md-sys-state-${n}-state-layer-opacity)`;
+        }
+
+        if (v.contentOpacity) {
+          _states[`.state-${n}`] ??= {};
+
+          _states[`.state-${n}`][
+            vars.stateContentOpacity
+          ] = `var(--md-sys-state-${n}-content-opacity)`;
+        }
+
+        if (v.containerOpacity) {
+          _states[`.state-${n}`] ??= {};
+          _states[`.state-${n}`][
+            vars.stateContainerOpacity
+          ] = `var(--md-sys-state-${n}-container-opacity)`;
+        }
       }
 
       addUtilities(_states);
@@ -304,22 +321,19 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
         ),
       });
 
+      const stateValues: Record<string, string> = {};
+
+      for (const [key] of Object.entries(md.sys.state)) {
+        stateValues[key] = key;
+      }
+
       matchVariant(
         "state",
         (value) => {
           return `&.state-${value}`;
         },
         {
-          values: {
-            hovered: "hovered",
-            focused: "focused",
-            pressed: "pressed",
-            dragged: "dragged",
-            disabled: "disabled",
-            selected: "selected",
-            activated: "activated",
-            enabled: "enabled",
-          },
+          values: stateValues,
         }
       );
 
@@ -329,16 +343,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           return `:merge(.group).state-${value} &`;
         },
         {
-          values: {
-            hovered: "hovered",
-            focused: "focused",
-            pressed: "pressed",
-            dragged: "dragged",
-            disabled: "disabled",
-            selected: "selected",
-            activated: "activated",
-            enabled: "enabled",
-          },
+          values: stateValues,
         }
       );
 
@@ -348,16 +353,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           return `:merge(.peer).state-${value} ~ &`;
         },
         {
-          values: {
-            hovered: "hovered",
-            focused: "focused",
-            pressed: "pressed",
-            dragged: "dragged",
-            disabled: "disabled",
-            selected: "selected",
-            activated: "activated",
-            enabled: "enabled",
-          },
+          values: stateValues,
         }
       );
 

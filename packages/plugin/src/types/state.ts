@@ -1,7 +1,7 @@
 export type State = {
-  containerOpacity: number | `${number}%`;
-  stateLayerOpacity: number | `${number}%`;
-  contentOpacity: number | `${number}%`;
+  containerOpacity?: number | `${number}%`;
+  contentOpacity?: number | `${number}%`;
+  stateLayerOpacity?: number | `${number}%`;
 };
 
 export type States = {

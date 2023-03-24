@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.3.0
+
+### Minor Changes
+
+- Cleaned up state API
+
 ## 0.2.2
 
 ### Patch Changes

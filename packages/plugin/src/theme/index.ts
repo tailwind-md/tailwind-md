@@ -54,40 +54,20 @@ export const materialDefaultOptions = {
     } satisfies Required<Required<MaterialDesignConfig>["theme"]["color"]>,
     state: {
       hovered: {
-        contentOpacity: "100%",
         stateLayerOpacity: "8%",
-        containerOpacity: "100%",
       },
       focused: {
-        contentOpacity: "100%",
         stateLayerOpacity: "12%",
-        containerOpacity: "100%",
-      },
-      enabled: {
-        contentOpacity: "100%",
-        stateLayerOpacity: "0%",
-        containerOpacity: "100%",
-      },
-      activated: {
-        contentOpacity: "100%",
-        stateLayerOpacity: "0%",
-        containerOpacity: "100%",
-      },
-      selected: {
-        contentOpacity: "100%",
-        stateLayerOpacity: "0%",
-        containerOpacity: "100%",
       },
       pressed: {
-        contentOpacity: "100%",
         stateLayerOpacity: "12%",
-        containerOpacity: "100%",
       },
       dragged: {
-        contentOpacity: "100%",
         stateLayerOpacity: "16%",
-        containerOpacity: "100%",
       },
+      enabled: {},
+      activated: {},
+      selected: {},
       disabled: {
         contentOpacity: "38%",
         stateLayerOpacity: "0%",

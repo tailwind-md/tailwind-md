@@ -8,7 +8,7 @@ importers:
       '@changesets/cli': ^2.26.0
       '@manypkg/cli': ^0.20.0
       '@tailwind-md/eslint-config': 0.0.3
-      '@tailwind-md/plugin': 0.2.0
+      '@tailwind-md/plugin': 0.2.2
       '@tailwind-md/prettier-config': 0.0.3
       '@tailwind-md/tsconfig': 0.0.2
       '@types/prettier': ^2.7.2
@@ -44,7 +44,7 @@ importers:
       autoprefixer: 10.4.14_postcss@8.4.21
       babel-preset-solid: 1.6.13_@babel+core@7.21.3
       eslint: 8.36.0
-      pnpm: 7.30.1
+      pnpm: 7.30.0
       postcss: 8.4.21
       postcss-import: 15.1.0_postcss@8.4.21
       postcss-nesting: 11.2.1_postcss@8.4.21
@@ -3063,8 +3063,8 @@ packages:
       pathe: 1.1.0
     dev: false
 
-  /pnpm/7.30.1:
-    resolution: {integrity: sha512-ThkXKxTUIUd7HhXkwQ+zl3dSU1xPdf7cA9Khthm4GuUJDkM2KJOCBXqlzoHQepXD0i7GbURXAx+WKQ/m6taBrQ==}
+  /pnpm/7.30.0:
+    resolution: {integrity: sha512-6SUdrWSZ4qvQ4uBVg7smnabVKOFrT7DgSz2NfViG54nRii4ODB395qmHprBiv5WBdlC/jZYBn99fSfmzIMI3WQ==}
     engines: {node: '>=14.6'}
     hasBin: true
     dev: false

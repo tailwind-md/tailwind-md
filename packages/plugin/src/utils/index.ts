@@ -14,6 +14,7 @@ import type {
   FontStyle,
   Elevation,
   ElevationDistance,
+  State,
 } from "../types";
 import type { DeepPartial } from "./types";
 
@@ -64,7 +65,7 @@ export function toCSSVariables(
   return vars;
 }
 
-export function toClassNames<K extends unknown>(
+export function toClassNames<K>(
   o: Record<string, K>,
   opts?: TransormerOptions
 ): Record<string, K> {
@@ -164,7 +165,7 @@ export function toTailwindColorTheme(
   const merged = { ...defaultThemeTransformerOptions, ...opts };
   const x: Record<string, string | TonalPalette> = {};
 
-  for (let [k, v] of Object.entries(o)) {
+  for (const [k, v] of Object.entries(o)) {
     const newKey = camelToKebabCase(merged.createKey(k, v));
     const cssVar = camelToKebabCase(merged.createValue(k, v));
 
@@ -186,7 +187,6 @@ export function toTailwindColorTheme(
 // type RecursiveRecord<K extends string | number | symbol, V> = {
 //   [Key in K]: V | RecursiveRecord<K, V>;
 // };
-
 export function toTailwindTheme<V>(
   o: Record<string, V>,
   opts?: ThemeTransformerOptions
@@ -194,7 +194,26 @@ export function toTailwindTheme<V>(
   const merged = { ...defaultThemeTransformerOptions, ...opts };
   const x: Record<string, string> = {};
 
-  for (let [k, v] of Object.entries(o)) {
+  for (const [k, v] of Object.entries(o)) {
+    x[camelToKebabCase(merged.createKey(k, v))] = `var(--${pf(
+      merged.prefix
+    )}${camelToKebabCase(merged.createValue(k, v))})`;
+  }
+
+  return x;
+}
+
+// type RecursiveRecord<K extends string | number | symbol, V> = {
+//   [Key in K]: V | RecursiveRecord<K, V>;
+// };
+export function statesToTailwindTheme(
+  o: Record<string, State>,
+  opts?: ThemeTransformerOptions
+): Record<string, string> {
+  const merged = { ...defaultThemeTransformerOptions, ...opts };
+  const x: Record<string, string> = {};
+
+  for (const [k, v] of Object.entries(o)) {
     x[camelToKebabCase(merged.createKey(k, v))] = `var(--${pf(
       merged.prefix
     )}${camelToKebabCase(merged.createValue(k, v))})`;
