@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.3.1
+
+### Patch Changes
+
+- Added more surface colors and fixed key colors
+
 ## 0.3.0
 
 ### Minor Changes

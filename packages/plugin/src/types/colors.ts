@@ -1,15 +1,28 @@
 export type Tones =
   | 0
+  | 2
+  | 4
+  | 6
+  | 8
   | 10
+  | 12
+  | 17
   | 20
+  | 22
+  | 24
   | 30
   | 40
   | 50
   | 60
   | 70
   | 80
+  | 87
   | 90
+  | 92
+  | 94
   | 95
+  | 96
+  | 98
   | 99
   | 100;
 
@@ -27,12 +40,26 @@ export type SystemKeyColor<AccentColor extends string> = Record<
   | `${AccentColor}`
   | `on${Capitalize<AccentColor>}`
   | `${AccentColor}Container`
-  | `on${Capitalize<AccentColor>}Container`,
+  | `on${Capitalize<AccentColor>}Container`
+  // Additional
+  | `${AccentColor}Fixed`
+  | `${AccentColor}FixedDim`
+  | `on${Capitalize<AccentColor>}Fixed`
+  | `on${Capitalize<AccentColor>}FixedVariant`,
   string
 >;
 
 export type SystemNeutralColors = {
   surface: string;
+  surfaceDim: string;
+  surfaceBright: string;
+
+  surfaceContainerHighest: string;
+  surfaceContainerHigh: string;
+  surfaceContainer: string;
+  surfaceContainerLow: string;
+  surfaceContainerLowest: string;
+
   onSurface: string;
   surfaceVariant: string;
   onSurfaceVariant: string;

@@ -22,6 +22,20 @@ export function Color() {
           </div>
         </div>
         <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-primary-fixed text-on-primary-fixed">
+            Primary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-primary-fixed-dim text-on-primary-fixed">
+            Primary Fixed Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-primary-fixed text-primary-fixed">
+            On Primary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-primary-fixed-variant text-primary-fixed-dim">
+            On Primary Fixed Variant
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-secondary text-on-secondary">
             Secondary
           </div>
@@ -36,6 +50,20 @@ export function Color() {
           </div>
         </div>
         <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-secondary-fixed text-on-secondary-fixed">
+            Secondary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-secondary-fixed-dim text-on-secondary-fixed">
+            Secondary Fixed Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-secondary-fixed text-secondary-fixed">
+            On Secondary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-secondary-fixed-variant text-secondary-fixed-dim">
+            On Secondary Fixed Variant
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-tertiary text-on-tertiary">
             Tertiary
           </div>
@@ -47,6 +75,20 @@ export function Color() {
           </div>
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-tertiary-container text-tertiary-container">
             On Tertiary Container
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-tertiary-fixed text-on-tertiary-fixed">
+            Tertiary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-tertiary-fixed-dim text-on-tertiary-fixed">
+            Tertiary Fixed Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-tertiary-fixed text-tertiary-fixed">
+            On Tertiary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-tertiary-fixed-variant text-tertiary-fixed-dim">
+            On Tertiary Fixed Variant
           </div>
         </div>
         <div class="flex flex-row gap-2">
@@ -117,6 +159,33 @@ export function Color() {
           </div>
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-outline-variant text-on-surface">
             Outline Variant
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-dim text-on-surface">
+            Surface Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-bright text-on-surface">
+            Surface Bright
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-highest text-on-surface">
+            Surface Container Highest
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-high text-on-surface">
+            Surface Container High
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container text-on-surface">
+            Surface Container
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-low text-on-surface">
+            Surface Container Low
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-lowest text-on-surface">
+            Surface Container Lowest
           </div>
         </div>
         <div class="flex flex-row gap-2">
@@ -151,6 +220,20 @@ export function Color() {
           </div>
         </div>
         <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-primary-fixed text-on-primary-fixed">
+            Primary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-primary-fixed-dim text-on-primary-fixed">
+            Primary Fixed Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-primary-fixed text-primary-fixed">
+            On Primary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-primary-fixed-variant text-primary-fixed-dim">
+            On Primary Fixed Variant
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-secondary text-on-secondary">
             Secondary
           </div>
@@ -165,6 +248,20 @@ export function Color() {
           </div>
         </div>
         <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-secondary-fixed text-on-secondary-fixed">
+            Secondary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-secondary-fixed-dim text-on-secondary-fixed">
+            Secondary Fixed Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-secondary-fixed text-secondary-fixed">
+            On Secondary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-secondary-fixed-variant text-secondary-fixed-dim">
+            On Secondary Fixed Variant
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-tertiary text-on-tertiary">
             Tertiary
           </div>
@@ -176,6 +273,20 @@ export function Color() {
           </div>
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-tertiary-container text-tertiary-container">
             On Tertiary Container
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-tertiary-fixed text-on-tertiary-fixed">
+            Tertiary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-tertiary-fixed-dim text-on-tertiary-fixed">
+            Tertiary Fixed Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-tertiary-fixed text-tertiary-fixed">
+            On Tertiary Fixed
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-on-tertiary-fixed-variant text-tertiary-fixed-dim">
+            On Tertiary Fixed Variant
           </div>
         </div>
         <div class="flex flex-row gap-2">
@@ -246,6 +357,33 @@ export function Color() {
           </div>
           <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-outline-variant text-on-surface">
             Outline Variant
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-dim text-on-surface">
+            Surface Dim
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-bright text-on-surface">
+            Surface Bright
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-highest text-on-surface">
+            Surface Container Highest
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-high text-on-surface">
+            Surface Container High
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container text-on-surface">
+            Surface Container
+          </div>
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-low text-on-surface">
+            Surface Container Low
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex h-36 w-72 flex-col items-center justify-center rounded-large bg-surface-container-lowest text-on-surface">
+            Surface Container Lowest
           </div>
         </div>
         <div class="flex flex-row gap-2">

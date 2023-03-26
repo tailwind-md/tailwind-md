@@ -116,19 +116,32 @@ export function capitalize<S extends string>(s: S): Capitalize<S> {
 
 function createBlankTonalPalette(): TonalPalette {
   return {
-    "0": "",
-    "10": "",
-    "20": "",
-    "30": "",
-    "40": "",
-    "50": "",
-    "60": "",
-    "70": "",
-    "80": "",
-    "90": "",
-    "95": "",
-    "99": "",
-    "100": "",
+    0: "",
+    2: "",
+    4: "",
+    6: "",
+    8: "",
+    10: "",
+    12: "",
+    17: "",
+    20: "",
+    22: "",
+    24: "",
+    30: "",
+    40: "",
+    50: "",
+    60: "",
+    70: "",
+    80: "",
+    87: "",
+    90: "",
+    92: "",
+    94: "",
+    95: "",
+    96: "",
+    98: "",
+    99: "",
+    100: "",
   };
 }
 
@@ -155,6 +168,28 @@ function createSystemKeyColors<C extends string>(
     [`on${capitalize(
       color
     )}Container`]: `var(--md-ref-palette-${color}${switchMode(mode, 10, 90)})`,
+    [`${color}Fixed`]: `var(--md-ref-palette-${color}${switchMode(
+      mode,
+      90,
+      90
+    )})`,
+    [`${color}FixedDim`]: `var(--md-ref-palette-${color}${switchMode(
+      mode,
+      80,
+      80
+    )})`,
+    [`on${capitalize(color)}Fixed`]: `var(--md-ref-palette-${color}${switchMode(
+      mode,
+      10,
+      10
+    )})`,
+    [`on${capitalize(
+      color
+    )}FixedVariant`]: `var(--md-ref-palette-${color}${switchMode(
+      mode,
+      30,
+      30
+    )})`,
   } as unknown as SystemKeyColor<C>;
 }
 
@@ -262,6 +297,34 @@ export function createColorScheme(
       30
     )})`,
     surface: `var(--md-ref-palette-neutral${switchMode(mode, 99, 10)})`,
+    surfaceDim: `var(--md-ref-palette-neutral${switchMode(mode, 87, 6)})`,
+    surfaceBright: `var(--md-ref-palette-neutral${switchMode(mode, 98, 24)})`,
+    surfaceContainerHighest: `var(--md-ref-palette-neutral${switchMode(
+      mode,
+      90,
+      22
+    )})`,
+    surfaceContainerHigh: `var(--md-ref-palette-neutral${switchMode(
+      mode,
+      92,
+      17
+    )})`,
+    surfaceContainer: `var(--md-ref-palette-neutral${switchMode(
+      mode,
+      94,
+      12
+    )})`,
+    surfaceContainerLow: `var(--md-ref-palette-neutral${switchMode(
+      mode,
+      96,
+      10
+    )})`,
+    surfaceContainerLowest: `var(--md-ref-palette-neutral${switchMode(
+      mode,
+      100,
+      4
+    )})`,
+
     onSurface: `var(--md-ref-palette-neutral${switchMode(mode, 10, 90)})`,
     surfaceVariant: `var(--md-ref-palette-neutral-variant${switchMode(
       mode,
@@ -302,7 +365,10 @@ export function createColorScheme(
 
 export function createReferencePalette(hex: string): ReferencePalette {
   const cp = CorePalette.of(argbFromHex(hex));
-  const tones: Tones[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+  const tones: Tones[] = [
+    0, 2, 4, 6, 8, 10, 12, 17, 20, 22, 24, 30, 40, 50, 60, 70, 80, 87, 90, 92,
+    94, 95, 96, 98, 99, 100,
+  ];
 
   const primary = createBlankTonalPalette();
   const secondary = createBlankTonalPalette();
@@ -337,7 +403,7 @@ export function createReferencePalette(hex: string): ReferencePalette {
 
   for (const [a, b] of x.map<[TonalPalette, OldTonalPalette]>((x, i) => [
     x,
-    y[i]!,
+    y[i],
   ])) {
     for (const t of tones) {
       a[t] = hexToRGBSpaceSeparated(hexFromArgb(b.tone(t)));
@@ -416,9 +482,9 @@ export function hexToRGB(h: string): [number, number, number] {
 
   const singleDigit = h.length === 4;
 
-  const r = singleDigit ? parseInt(h[1]!) : parseInt(h[1]! + h[2]!, 16);
-  const g = singleDigit ? parseInt(h[2]!) : parseInt(h[3]! + h[4]!, 16);
-  const b = singleDigit ? parseInt(h[3]!) : parseInt(h[5]! + h[6]!, 16);
+  const r = singleDigit ? parseInt(h[1]) : parseInt(h[1] + h[2], 16);
+  const g = singleDigit ? parseInt(h[2]) : parseInt(h[3] + h[4], 16);
+  const b = singleDigit ? parseInt(h[3]) : parseInt(h[5] + h[6], 16);
 
   return [r, g, b];
 }
@@ -463,16 +529,29 @@ export function createTonalPalette(hex: string): TonalPalette {
 
   return {
     0: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(0))),
+    2: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(2))),
+    4: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(4))),
+    6: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(6))),
+    8: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(8))),
     10: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(10))),
+    12: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(12))),
+    17: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(17))),
     20: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(20))),
+    22: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(22))),
+    24: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(24))),
     30: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(30))),
     40: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(40))),
     50: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(50))),
     60: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(60))),
     70: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(70))),
     80: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(80))),
+    87: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(87))),
     90: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(90))),
+    92: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(92))),
+    94: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(94))),
     95: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(95))),
+    96: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(96))),
+    98: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(98))),
     99: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(99))),
     100: hexToRGBSpaceSeparated(hexFromArgb(tp.tone(100))),
   };
