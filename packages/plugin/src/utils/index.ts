@@ -151,8 +151,22 @@ function switchMode<V>(mode: "light" | "dark", lightValue: V, darkValue: V): V {
 
 function createSystemKeyColors<C extends string>(
   color: C,
-  mode: "light" | "dark" = "light"
+  mode: "light" | "dark" = "light",
+  tp?: TonalPalette
 ): SystemKeyColor<C> {
+  if (tp) {
+    return {
+      [`${color}`]: switchMode(mode, tp[40], tp[80]),
+      [`on${capitalize(color)}`]: switchMode(mode, tp[100], tp[20]),
+      [`${color}Container`]: switchMode(mode, tp[90], tp[30]),
+      [`on${capitalize(color)}Container`]: switchMode(mode, tp[10], tp[90]),
+      [`${color}Fixed`]: switchMode(mode, tp[90], tp[90]),
+      [`${color}FixedDim`]: switchMode(mode, tp[80], tp[80]),
+      [`on${capitalize(color)}Fixed`]: switchMode(mode, tp[10], tp[10]),
+      [`on${capitalize(color)}FixedVariant`]: switchMode(mode, tp[30], tp[30]),
+    } as unknown as SystemKeyColor<C>;
+  }
+
   return {
     [`${color}`]: `var(--md-ref-palette-${color}${switchMode(mode, 40, 80)})`,
     [`on${capitalize(color)}`]: `var(--md-ref-palette-${color}${switchMode(
@@ -286,8 +300,69 @@ export function toTailwindFontSizeTheme(
 }
 
 export function createColorScheme(
-  mode: "light" | "dark" = "light"
+  mode: "light" | "dark" = "light",
+  ref?: ReferencePalette
 ): SystemColorScheme {
+  if (ref) {
+    return {
+      // Neutrals
+      outline: switchMode(mode, ref.neutralVariant[50], ref.neutralVariant[60]),
+      outlineVariant: switchMode(
+        mode,
+        ref.neutralVariant[80],
+        ref.neutralVariant[30]
+      ),
+      surface: switchMode(mode, ref.neutral[99], ref.neutral[10]),
+      surfaceDim: switchMode(mode, ref.neutral[87], ref.neutral[6]),
+      surfaceBright: switchMode(mode, ref.neutral[99], ref.neutral[24]),
+      surfaceContainerHighest: switchMode(
+        mode,
+        ref.neutral[90],
+        ref.neutral[22]
+      ),
+      surfaceContainerHigh: switchMode(mode, ref.neutral[92], ref.neutral[17]),
+      surfaceContainer: switchMode(mode, ref.neutral[94], ref.neutral[12]),
+      surfaceContainerLow: switchMode(mode, ref.neutral[96], ref.neutral[10]),
+      surfaceContainerLowest: switchMode(
+        mode,
+        ref.neutral[100],
+        ref.neutral[4]
+      ),
+
+      onSurface: switchMode(mode, ref.neutral[10], ref.neutral[90]),
+      surfaceVariant: switchMode(
+        mode,
+        ref.neutralVariant[90],
+        ref.neutralVariant[30]
+      ),
+      onSurfaceVariant: switchMode(
+        mode,
+        ref.neutralVariant[30],
+        ref.neutralVariant[80]
+      ),
+      background: switchMode(mode, ref.neutral[99], ref.neutral[10]),
+      onBackground: switchMode(mode, ref.neutral[10], ref.neutral[90]),
+
+      // Key colors
+      ...createSystemKeyColors("primary", mode, ref.primary),
+      ...createSystemKeyColors("secondary", mode, ref.secondary),
+      ...createSystemKeyColors("tertiary", mode, ref.tertiary),
+      ...createSystemKeyColors("success", mode, ref.success),
+      ...createSystemKeyColors("warning", mode, ref.warning),
+      ...createSystemKeyColors("error", mode, ref.error),
+
+      // Extras
+      white: ref.neutral[100],
+      black: ref.neutral[0],
+      scrim: ref.neutral[0],
+      shadow: ref.neutral[0],
+      inversePrimary: switchMode(mode, ref.primary[80], ref.primary[40]),
+      inverseSurface: switchMode(mode, ref.neutral[20], ref.neutral[90]),
+      inverseOnSurface: switchMode(mode, ref.neutral[95], ref.neutral[20]),
+      surfaceTint: `var(--md-sys-color-primary)`,
+    };
+  }
+
   return {
     // Neutrals
     outline: `var(--md-ref-palette-neutral-variant${switchMode(mode, 50, 60)})`,

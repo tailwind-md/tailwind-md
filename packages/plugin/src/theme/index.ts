@@ -236,15 +236,21 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
 
   _lastMergedConfig = deepMerge(materialDefaultOptions, opts);
 
+  const ref = createReferencePalette(_lastMergedConfig.theme.color.seed);
+
   _mdt = deepMerge(
     {
       ref: {
-        palette: createReferencePalette(_lastMergedConfig.theme.color.seed),
+        palette: ref,
       },
       sys: {
         color: {
-          light: createColorScheme("light"),
-          dark: createColorScheme("dark"),
+          light: !_lastMergedConfig.emitReferenceClasses
+            ? createColorScheme("light", ref)
+            : createColorScheme("light"),
+          dark: !_lastMergedConfig.emitReferenceClasses
+            ? createColorScheme("dark", ref)
+            : createColorScheme("dark"),
         },
         state: _lastMergedConfig.theme.state,
         shape: _lastMergedConfig.theme.shape,

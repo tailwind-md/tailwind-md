@@ -67,6 +67,10 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
 
       delete (md.sys as any).elevation;
 
+      if (!opts.emitReferenceClasses) {
+        delete (md.ref as any).palette;
+      }
+
       const elevations: Record<
         string,
         {
@@ -123,6 +127,38 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
           [vars.stateContentOpacity]: "100%",
           [vars.stateStateLayerOpacity]: "0%",
           [vars.stateContainerOpacity]: "100%",
+        },
+      });
+
+      addUtilities({
+        ".material-inherit-vars": {
+          // Material
+          // [vars.rippleColor]: "transparent",
+          // [vars.rippleImage]:
+          //   "linear-gradient(0deg, transparent 0%, transparent 0%)",
+          // [vars.rippleOpacity]: "0%",
+
+          [vars.stateLayerColor]: "inherit",
+          [vars.stateLayerImage]: "inherit",
+          [vars.stateLayerOpacity]: "inherit",
+
+          [vars.surfaceOverlayColor]: "inherit",
+          [vars.surfaceOverlayImage]: "inherit",
+          [vars.surfaceOverlayOpacity]: "inherit",
+
+          [vars.containerColor]: "inherit",
+          [vars.containerImage]: "inherit",
+          [vars.containerOpacity]: "inherit",
+
+          // Elevation
+          [vars.elevationSurfaceTintOpacity]: "inherit",
+          [vars.elevationBoxShadowUmbra]: "inherit",
+          [vars.elevationBoxShadowPenumbra]: "inherit",
+
+          // State
+          [vars.stateContentOpacity]: "inherit",
+          [vars.stateStateLayerOpacity]: "inherit",
+          [vars.stateContainerOpacity]: "inherit",
         },
       });
 
@@ -418,6 +454,16 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       prefix: "md-sys-color",
     });
 
+    if (opts?.emitReferenceClasses) {
+      colors = {
+        ...colors,
+
+        ...toTailwindColorTheme(md.ref.palette, {
+          prefix: "md-ref-palette",
+        }),
+      };
+    }
+
     const opacity = {
       ...toTailwindTheme(flattenProperties(md.sys.state), {
         prefix: "md-sys-state",
@@ -425,7 +471,7 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       }),
       ...toTailwindTheme(flattenProperties(md.sys.elevation), {
         prefix: "md-sys-elevation",
-        createKey: (k) => `${k}`,
+        createKey: (k) => `${k}-surface-tint`,
         createValue: (k) => `${k}-surface-tint-opacity`,
       }),
     } as unknown as RTKVP;
@@ -456,16 +502,6 @@ const materialDesignPlugin = plugin.withOptions<Partial<MaterialDesignConfig>>(
       var(${vars.elevationBoxShadowUmbra}, 0 0 0 0) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 30%)), 
       var(${vars.elevationBoxShadowPenumbra}, 0 0 0 0) var(--tw-shadow-color, rgb(var(--md-sys-color-black) / 15%))
     `;
-
-    if (opts?.emitReferenceClasses) {
-      colors = {
-        ...colors,
-
-        ...toTailwindColorTheme(md.ref.palette, {
-          prefix: "md-ref-palette",
-        }),
-      };
-    }
 
     return {
       theme: {

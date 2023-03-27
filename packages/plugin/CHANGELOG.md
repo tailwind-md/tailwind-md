@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.3.2
+
+### Patch Changes
+
+- Removed unused reference classes
+
 ## 0.3.1
 
 ### Patch Changes

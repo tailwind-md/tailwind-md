@@ -1,6 +1,6 @@
 export function Color() {
   return (
-    <div class="flex flex-col gap-6 p-4 peer-state-hovered:bg-red-100">
+    <div class="flex flex-col gap-6 p-4">
       <h2 class="text-headline-medium text-on-background">Color</h2>
       <h3 class="text-headline-small text-on-surface">Light</h3>
       <div
