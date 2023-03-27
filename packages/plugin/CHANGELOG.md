@@ -1,5 +1,11 @@
 # @tailwind-md/plugin
 
+## 0.4.0
+
+### Minor Changes
+
+- db18279: Fix custom ref behavior
+
 ## 0.3.2
 
 ### Patch Changes

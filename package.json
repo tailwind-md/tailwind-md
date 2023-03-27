@@ -17,7 +17,7 @@
     "@changesets/cli": "^2.26.0",
     "@manypkg/cli": "^0.20.0",
     "@tailwind-md/eslint-config": "0.0.3",
-    "@tailwind-md/plugin": "0.3.1",
+    "@tailwind-md/plugin": "0.4.0",
     "@tailwind-md/prettier-config": "0.0.3",
     "@tailwind-md/tsconfig": "0.0.2",
     "@types/prettier": "^2.7.2",
