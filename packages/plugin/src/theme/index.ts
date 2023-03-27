@@ -237,6 +237,10 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
   _lastMergedConfig = deepMerge(materialDefaultOptions, opts);
 
   const ref = createReferencePalette(_lastMergedConfig.theme.color.seed);
+  const customRefs = createCustomReferencePalatte(
+    _lastMergedConfig.theme.color.seedReferencePalette
+  );
+  const mergedRefs = deepMerge(ref, customRefs);
 
   _mdt = deepMerge(
     {
@@ -246,23 +250,16 @@ export function materialDesignTheme(opts: MaterialDesignConfig): {
       sys: {
         color: {
           light: !_lastMergedConfig.emitReferenceClasses
-            ? createColorScheme("light", ref)
+            ? createColorScheme("light", mergedRefs)
             : createColorScheme("light"),
           dark: !_lastMergedConfig.emitReferenceClasses
-            ? createColorScheme("dark", ref)
+            ? createColorScheme("dark", mergedRefs)
             : createColorScheme("dark"),
         },
         state: _lastMergedConfig.theme.state,
         shape: _lastMergedConfig.theme.shape,
         typescale: _lastMergedConfig.theme.typescale,
         elevation: _lastMergedConfig.theme.elevation,
-      },
-    },
-    {
-      ref: {
-        palette: createCustomReferencePalatte(
-          _lastMergedConfig.theme.color.seedReferencePalette ?? {}
-        ),
       },
     },
     {
